@@ -1,11 +1,10 @@
 package com.markoid.packit.authentication.presentation.config
 
 import com.markoid.packit.authentication.data.service.AppUserDetailsService
-import com.markoid.packit.authentication.presentation.filters.AuthenticationFilter
 import com.markoid.packit.authentication.presentation.filters.AuthorizationFilter
-import com.markoid.packit.authentication.presentation.utils.AuthConstants.AUTH_PATH
-import com.markoid.packit.authentication.presentation.utils.AuthConstants.SIGN_IN_URL
-import com.markoid.packit.authentication.presentation.utils.AuthConstants.SIGN_UP_URL
+import com.markoid.packit.core.presentation.utils.ApiConstants.AUTH_PATH
+import com.markoid.packit.core.presentation.utils.ApiConstants.SIGN_IN_URL
+import com.markoid.packit.core.presentation.utils.ApiConstants.SIGN_UP_URL
 import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -38,7 +37,6 @@ class SecurityConfiguration(
             ?.antMatchers(HttpMethod.POST, AUTH_PATH + SIGN_IN_URL)?.permitAll()
             ?.anyRequest()?.authenticated()
             ?.and()
-            ?.addFilter(AuthenticationFilter(authenticationManager()))
             ?.addFilter(AuthorizationFilter(authenticationManager()))
             ?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

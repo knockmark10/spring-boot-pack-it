@@ -15,11 +15,11 @@ class AuthDataSourceImpl(
 ) : AuthDataSource {
 
     override fun cacheDriver(driverEntity: DriverEntity): DriverEntity {
-        return this.driverCache.save(driverEntity)
+        return this.driverCache.saveOrUpdate(driverEntity.email, driverEntity)
     }
 
     override fun cacheUser(userEntity: UserEntity): UserEntity {
-        return this.userCache.save(userEntity)
+        return this.userCache.saveOrUpdate(userEntity.email, userEntity)
     }
 
     override fun fetchDriverByEmail(email: String): DriverEntity? {
@@ -31,11 +31,11 @@ class AuthDataSourceImpl(
     }
 
     override fun getCachedDriverByEmail(email: String): DriverEntity? {
-        return this.driverCache.getOne(email)
+        return this.driverCache.getById(email)
     }
 
     override fun getCachedUserByEmail(email: String): UserEntity? {
-        return userCache.getOne(email)
+        return userCache.getById(email)
     }
 
     override fun saveDriverInDatabase(driverEntity: DriverEntity): DriverEntity {
@@ -47,4 +47,5 @@ class AuthDataSourceImpl(
         this.userDao.save(userEntity)
         return userEntity
     }
+
 }

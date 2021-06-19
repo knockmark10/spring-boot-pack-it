@@ -10,7 +10,7 @@ class SaveShipmentUseCase(
 ) : BaseUseCase<ShipmentEntity, ShipmentEntity>() {
 
     override fun execute(request: ShipmentEntity): ResponseEntity<ShipmentEntity> {
-        val result = this.shipmentRepository.saveShipment(request)
+        val result = this.shipmentRepository.saveShipment(request.userId, request)
         return ResponseEntity.ok(result)
     }
 

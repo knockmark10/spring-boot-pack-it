@@ -9,12 +9,16 @@ class ShipmentDataSourceImpl(
     private val shipmentDao: ShipmentDao
 ) : ShipmentDataSource {
 
-    override fun cacheShipment(shipment: ShipmentEntity): ShipmentEntity {
-        return this.shipmentCache.save(shipment)
+    override fun cacheShipments(userId: String, shipments: List<ShipmentEntity>): List<ShipmentEntity> {
+        return this.shipmentCache.saveOrUpdate(userId, shipments)
     }
 
-    override fun fetchAllShipments(): List<ShipmentEntity> {
-        return this.shipmentDao.findAll()
+    override fun fetchShipmentsFromDatabaseByUserId(userId: String): List<ShipmentEntity> {
+        return this.shipmentDao.findShipmentByUserId(userId)
+    }
+
+    override fun getCachedShipmentsByUserId(userId: String): List<ShipmentEntity> {
+        return this.shipmentCache.getById(userId) ?: emptyList()
     }
 
     override fun saveShipmentInDatabase(shipment: ShipmentEntity): ShipmentEntity {

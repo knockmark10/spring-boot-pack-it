@@ -13,10 +13,9 @@ data class ShipmentEntity(
     var packageList: List<PackageEntity> = mutableListOf(),
     var pickUpDirection: DirectionEntity = DirectionEntity(),
     var receivedAt: String? = null,
+    @JsonProperty("id") var shipId: String = "",
     var status: ShipmentStatus = ShipmentStatus.Idle,
-    @JsonProperty("id")
-    var shipId: String = "",
-    @JsonProperty("shipId")
-    @Id var id: String = "",
-    var totalDistance: Double = 0.0
+    @JsonProperty("shipId") @Id var id: String = "",
+    var totalDistance: Double = 0.0,
+    var userId: String
 )

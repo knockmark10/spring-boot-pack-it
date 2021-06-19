@@ -8,25 +8,39 @@ class ShipmentRepositoryImpl(
 ) : ShipmentRepository {
 
     /**
-     * Gets all shipments from database, and updates the cache
+     * Gets the user's shipments. Caching technique is implemented so that we have the cache always up-to-date and to
+     * improve performance. Shipment will be looked up in the cache. If it's there, that shipment list will be retrieved.
+     * Otherwise, a database lookup will be performed, and then will be cached to keep the cache updated.
      */
-    override fun getAllShipments(): List<ShipmentEntity> {
-        // Fetch shipments from database
-        val shipments = this.shipmentDataSource.fetchAllShipments()
-        // Cache shipments
-        shipments.forEach { this.shipmentDataSource.cacheShipment(it) }
-        // Return shipment list
+    override fun getShipmentsByUserId(userId: String): List<ShipmentEntity> {
+        val shipments = mutableListOf<ShipmentEntity>()
+        // Get the list from cache
+        shipments.addAll(this.shipmentDataSource.getCachedShipmentsByUserId(userId))
+        // Check shipment list. If it is empty, it's not cached. Retrieve it from the database
+        if (shipments.isEmpty()) {
+            // Get shipment from database
+            shipments.addAll(this.shipmentDataSource.fetchShipmentsFromDatabaseByUserId(userId))
+            // Cache shipment to keep it updated
+            this.shipmentDataSource.cacheShipments(userId, shipments)
+        }
         return shipments
     }
 
     /**
-     * Saves the shipment into the database and caches it
+     * Saves the shipment into the database and caches it. This will make sure the cache is up-to-date, so that database
+     * lookups are not required very often, and improve performance.
      */
-    override fun saveShipment(shipment: ShipmentEntity): ShipmentEntity {
+    override fun saveShipment(userId: String, shipment: ShipmentEntity): ShipmentEntity {
         // Save shipment in database
         this.shipmentDataSource.saveShipmentInDatabase(shipment)
-        // Cache shipment
-        this.shipmentDataSource.cacheShipment(shipment)
+        // Cache shipments. Use SET to prevent duplications
+        val cachedShipments = mutableSetOf<ShipmentEntity>()
+        // Retrieve the cached shipments
+        cachedShipments.addAll(this.shipmentDataSource.getCachedShipmentsByUserId(userId))
+        // Add the new shipment to the list
+        cachedShipments.add(shipment)
+        // Cache the updated shipment list
+        this.shipmentDataSource.cacheShipments(userId, cachedShipments.toList())
         // Return shipment
         return shipment
     }

@@ -12,15 +12,32 @@ class AuthRepositoryImpl(
      * Gets driver by email. It will look on the cache first to avoid unnecessary look-ups, and if it's not found there,
      * it will go to the database.
      */
-    override fun getDriverByEmail(email: String): DriverEntity? =
-        this.authDataSourceImpl.getCachedDriverByEmail(email) ?: this.authDataSourceImpl.fetchDriverByEmail(email)
+    override fun getDriverByEmail(email: String): DriverEntity? {
+        // Get cached driver
+        var driver = this.authDataSourceImpl.getCachedDriverByEmail(email)
+        // If it's null, it means there is no driver cached. Fetch it from database
+        if (driver == null) {
+            driver = this.authDataSourceImpl.fetchDriverByEmail(email)
+            driver?.let { this.authDataSourceImpl.cacheDriver(it) }
+        }
+        return driver
+    }
 
     /**
      * Gets user by email. It will look on the cache first to avoid unnecessary look-ups, and if it's not found there,
      * it will go to the database.
      */
-    override fun getUserByEmail(email: String): UserEntity? =
-        this.authDataSourceImpl.getCachedUserByEmail(email) ?: this.authDataSourceImpl.fetchUserByEmail(email)
+    override fun getUserByEmail(email: String): UserEntity? {
+        // Get cached user
+        var user = this.authDataSourceImpl.getCachedUserByEmail(email)
+        // If it is null, it means there is no user cached. Fetch it from the database
+        if (user == null) {
+            user = this.authDataSourceImpl.fetchUserByEmail(email)
+            // Cache user from database if there is one
+            user?.let { this.authDataSourceImpl.cacheUser(user) }
+        }
+        return user
+    }
 
     override fun saveDriver(driverEntity: DriverEntity): DriverEntity {
         // Save driver on database
