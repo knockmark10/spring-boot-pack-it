@@ -7,10 +7,12 @@ import com.markoid.packit.authentication.data.dao.UserDao
 import com.markoid.packit.authentication.data.datasource.AuthDataSourceImpl
 import com.markoid.packit.authentication.data.repository.AuthRepository
 import com.markoid.packit.authentication.data.repository.AuthRepositoryImpl
+import com.markoid.packit.authentication.data.service.AppUserDetailsService
 import com.markoid.packit.authentication.domain.usecases.SignInUseCase
 import com.markoid.packit.authentication.domain.usecases.SignUpUseCase
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 @Configuration
 class AuthConfiguration {
@@ -20,6 +22,9 @@ class AuthConfiguration {
 
     @Bean
     fun providesDriverCacheImpl(): DriverCacheImpl = DriverCacheImpl()
+
+    @Bean
+    fun providesBCryptPasswordEncoder(): BCryptPasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
     fun providesAuthDataSource(
@@ -34,11 +39,16 @@ class AuthConfiguration {
         AuthRepositoryImpl(authDataSourceImpl)
 
     @Bean
-    fun providesSignUpUseCase(authRepository: AuthRepository): SignUpUseCase =
-        SignUpUseCase(authRepository)
+    fun providesSignUpUseCase(
+        authRepository: AuthRepository,
+        bCryptPasswordEncoder: BCryptPasswordEncoder
+    ): SignUpUseCase = SignUpUseCase(authRepository, bCryptPasswordEncoder)
 
     @Bean
-    fun providesSignInUseCase(authRepository: AuthRepository): SignInUseCase =
-        SignInUseCase(authRepository)
+    fun providesSignInUseCase(authRepository: AuthRepository): SignInUseCase = SignInUseCase(authRepository)
+
+    @Bean
+    fun providesAppUserDetailsService(authRepository: AuthRepository): AppUserDetailsService =
+        AppUserDetailsService(authRepository)
 
 }

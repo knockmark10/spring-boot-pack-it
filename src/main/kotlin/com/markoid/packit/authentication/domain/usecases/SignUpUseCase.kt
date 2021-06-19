@@ -10,9 +10,11 @@ import com.markoid.packit.core.data.BaseResponse
 import com.markoid.packit.core.domain.usecases.BaseUseCase
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 class SignUpUseCase(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val bCryptPasswordEncoder: BCryptPasswordEncoder
 ) : BaseUseCase<BaseResponse, SignUpRequest>() {
 
     override fun execute(request: SignUpRequest): ResponseEntity<BaseResponse> = when (request.userType) {
@@ -29,7 +31,7 @@ class SignUpUseCase(
                 email = request.email,
                 lastName = request.lastName,
                 name = request.name,
-                password = request.password
+                password = bCryptPasswordEncoder.encode(request.password)
             )
             this.authRepository.saveUser(user)
             ResponseEntity.status(HttpStatus.OK)
@@ -50,7 +52,7 @@ class SignUpUseCase(
                 email = request.email,
                 lastName = request.lastName,
                 name = request.name,
-                password = request.password
+                password = bCryptPasswordEncoder.encode(request.password)
             )
             this.authRepository.saveDriver(driver)
             ResponseEntity.status(HttpStatus.OK)

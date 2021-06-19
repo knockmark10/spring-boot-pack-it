@@ -1,5 +1,6 @@
 package com.markoid.packit.shipments.data.entities
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
@@ -13,10 +14,9 @@ data class ShipmentEntity(
     var pickUpDirection: DirectionEntity = DirectionEntity(),
     var receivedAt: String? = null,
     var status: ShipmentStatus = ShipmentStatus.Idle,
+    @JsonProperty("id")
     var shipId: String = "",
+    @JsonProperty("shipId")
     @Id var id: String = "",
     var totalDistance: Double = 0.0
 )
-
-fun emptyShipment(): ShipmentEntity =
-    ShipmentEntity("", DirectionEntity())
