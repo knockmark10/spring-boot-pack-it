@@ -63,7 +63,7 @@ class SignInUseCase(
         val storedPassword = when (user) {
             is UserEntity -> user.password
             is DriverEntity -> user.password
-            else -> throw RuntimeException("")
+            else -> throw UserNotFoundException()
         }
         // Check if password provided matches the encoded one that's stored
         return bCryptPasswordEncoder.matches(password, storedPassword)

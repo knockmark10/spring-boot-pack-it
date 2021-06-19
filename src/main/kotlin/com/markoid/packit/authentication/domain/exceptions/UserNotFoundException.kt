@@ -5,4 +5,4 @@ import org.springframework.web.server.ResponseStatusException
 
 class UserNotFoundException(
     message: String = "The requested user does not exist."
-) : ResponseStatusException(HttpStatus.FORBIDDEN, message)
+) : ResponseStatusException(HttpStatus.BAD_REQUEST, message)

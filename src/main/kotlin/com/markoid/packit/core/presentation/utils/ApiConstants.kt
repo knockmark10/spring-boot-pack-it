@@ -5,7 +5,8 @@ object ApiConstants {
     // Authentication constants
     const val KEY = "q3t6w9z\$C&F)J@NcQfTjWnZr4u7x!A%D*G-KaPdSgUkXp2s5v8y/B?E(H+MbQeTh"
     const val TOKEN_HEADER_NAME = "x-access-token"
-    const val EXPIRATION_TIME = 1000 * 60 * 60 * 24
+//    const val EXPIRATION_TIME = 1000 * 60 * 60 * 24
+    const val EXPIRATION_TIME = 1000
 
     const val USER_ID_PARAM = "userid"
 

@@ -1,6 +1,5 @@
 package com.markoid.packit.shipments.presentation.controllers
 
-import com.markoid.packit.core.presentation.controllers.BaseAuthController
 import com.markoid.packit.core.presentation.utils.ApiConstants
 import com.markoid.packit.shipments.data.entities.ShipmentEntity
 import com.markoid.packit.shipments.domain.usecases.GetShipmentsUseCase
@@ -16,13 +15,12 @@ import org.springframework.web.bind.annotation.*
 class ShipmentController(
     private val getShipmentsUseCase: GetShipmentsUseCase,
     private val saveShipmentUseCase: SaveShipmentUseCase
-) : BaseAuthController() {
+) {
 
     @GetMapping
     fun getShipmentsByUserId(
         @RequestHeader(ApiConstants.USER_ID_PARAM, required = false) userId: String?
     ): ResponseEntity<List<ShipmentEntity>> = this.getShipmentsUseCase.execute(userId)
-
 
     @PostMapping
     fun saveShipment(
