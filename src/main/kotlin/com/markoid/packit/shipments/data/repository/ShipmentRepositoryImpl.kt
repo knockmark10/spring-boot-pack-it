@@ -7,6 +7,11 @@ class ShipmentRepositoryImpl(
     private val shipmentDataSource: ShipmentDataSourceImpl
 ) : ShipmentRepository {
 
+    override fun deleteShipmentById(shipId: String): Boolean {
+        val shipmentDeleted = this.shipmentDataSource.deleteShipmentById(shipId)
+        return shipmentDeleted != null
+    }
+
     /**
      * Gets the user's shipments. Caching technique is implemented so that we have the cache always up-to-date and to
      * improve performance. Shipment will be looked up in the cache. If it's there, that shipment list will be retrieved.
@@ -30,7 +35,7 @@ class ShipmentRepositoryImpl(
      * Saves the shipment into the database and caches it. This will make sure the cache is up-to-date, so that database
      * lookups are not required very often, and improve performance.
      */
-    override fun saveShipment(userId: String, shipment: ShipmentEntity): ShipmentEntity {
+    override fun saveNewShipment(userId: String, shipment: ShipmentEntity): ShipmentEntity {
         // Save shipment in database
         this.shipmentDataSource.saveShipmentInDatabase(shipment)
         // Cache shipments. Use SET to prevent duplications
@@ -43,6 +48,24 @@ class ShipmentRepositoryImpl(
         this.shipmentDataSource.cacheShipments(userId, cachedShipments.toList())
         // Return shipment
         return shipment
+    }
+
+    /**
+     * Updates an existing shipment, if there is one.
+     *
+     * @param userId - Id of the shipment's owner
+     * @param shipment - The shipment to be updated
+     * @return - Whether or not the update was performed
+     */
+    override fun updateExistingShipment(userId: String, shipment: ShipmentEntity): Boolean {
+        // Check if user has shipments
+        return if (this.shipmentDataSource.doesUserHaveShipments(userId)) {
+            // Update the shipment
+            saveNewShipment(userId, shipment)
+            true
+        } else {
+            false
+        }
     }
 
 }

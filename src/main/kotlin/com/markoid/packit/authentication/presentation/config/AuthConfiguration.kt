@@ -43,15 +43,13 @@ class AuthConfiguration {
     fun providesSignUpUseCase(
         authRepository: AuthRepository,
         bCryptPasswordEncoder: BCryptPasswordEncoder,
-        messageSource: MessageSource
-    ): SignUpUseCase = SignUpUseCase(authRepository, bCryptPasswordEncoder, messageSource)
+    ): SignUpUseCase = SignUpUseCase(authRepository, bCryptPasswordEncoder)
 
     @Bean
     fun providesSignInUseCase(
         authRepository: AuthRepository,
         bCryptPasswordEncoder: BCryptPasswordEncoder,
-        messageSource: MessageSource
-    ): SignInUseCase = SignInUseCase(authRepository, bCryptPasswordEncoder, messageSource)
+    ): SignInUseCase = SignInUseCase(authRepository, bCryptPasswordEncoder)
 
     @Bean
     fun providesAppUserDetailsService(authRepository: AuthRepository): AppUserDetailsService =

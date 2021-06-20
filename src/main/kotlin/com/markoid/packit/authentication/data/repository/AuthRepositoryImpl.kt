@@ -8,6 +8,11 @@ class AuthRepositoryImpl(
     private val authDataSourceImpl: AuthDataSourceImpl
 ) : AuthRepository {
 
+    override fun getDriverByUserId(userId: String): DriverEntity? {
+        // Fetch the driver from database, No caching is necessary since the cache is indexed by email
+        return authDataSourceImpl.fetchDriverByUserId(userId)
+    }
+
     /**
      * Gets driver by email. It will look on the cache first to avoid unnecessary look-ups, and if it's not found there,
      * it will go to the database.

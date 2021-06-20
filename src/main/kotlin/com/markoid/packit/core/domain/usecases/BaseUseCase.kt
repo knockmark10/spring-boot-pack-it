@@ -2,12 +2,17 @@ package com.markoid.packit.core.domain.usecases
 
 import com.markoid.packit.core.data.ApiState
 import com.markoid.packit.core.data.BaseResponse
-import org.springframework.context.MessageSource
-import org.springframework.http.HttpStatus
+import com.markoid.packit.core.domain.exceptions.HttpStatusException
+import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
+import com.markoid.packit.core.presentation.handlers.LocaleResolver
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import java.util.*
+import org.springframework.web.server.ResponseStatusException
 
-abstract class BaseUseCase<Result, Params>(private val messageSource: MessageSource) {
+abstract class BaseUseCase<Result, Params> {
+
+    @Autowired
+    private lateinit var localeResolver: LocaleResolver
 
     private var language: String = "en"
 
@@ -18,14 +23,14 @@ abstract class BaseUseCase<Result, Params>(private val messageSource: MessageSou
         return this
     }
 
-    /**
-     * Gets a translated string based on the [key] provided.
-     */
-    fun getString(key: String): String =
-        this.messageSource.getMessage(key, null, Locale.forLanguageTag(language))
+    fun buildOkMessage(dictionary: ExceptionDictionary): ResponseEntity<BaseResponse> = ResponseEntity
+        .status(dictionary.statusCode)
+        .body(BaseResponse(ApiState.Success, localeResolver.getString(dictionary, language)))
 
-    fun buildOkMessage(messageKey: String): ResponseEntity<BaseResponse> = ResponseEntity
-        .status(HttpStatus.OK)
-        .body(BaseResponse(ApiState.Success, getString(messageKey)))
+    /**
+     * Creates a [HttpStatusException] with a translated message for the given [ExceptionDictionary].
+     */
+    fun raiseException(dictionary: ExceptionDictionary): ResponseStatusException =
+        HttpStatusException(dictionary.statusCode, localeResolver.getString(dictionary, language))
 
 }

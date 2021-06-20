@@ -5,9 +5,10 @@ import com.markoid.packit.shipments.data.dao.ShipmentDao
 import com.markoid.packit.shipments.data.datasource.ShipmentDataSourceImpl
 import com.markoid.packit.shipments.data.repository.ShipmentRepository
 import com.markoid.packit.shipments.data.repository.ShipmentRepositoryImpl
+import com.markoid.packit.shipments.domain.usecases.DeleteShipmentUseCase
 import com.markoid.packit.shipments.domain.usecases.GetShipmentsUseCase
 import com.markoid.packit.shipments.domain.usecases.SaveShipmentUseCase
-import org.springframework.context.MessageSource
+import com.markoid.packit.shipments.domain.usecases.UpdateShipmentUseCase
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -27,15 +28,19 @@ class ShipmentConfiguration {
         ShipmentRepositoryImpl(shipmentDataSource)
 
     @Bean
-    fun providesGetShipmentUseCase(
-        shipmentRepository: ShipmentRepository,
-        messageSource: MessageSource
-    ): GetShipmentsUseCase = GetShipmentsUseCase(shipmentRepository, messageSource)
+    fun providesGetShipmentUseCase(shipmentRepository: ShipmentRepository): GetShipmentsUseCase =
+        GetShipmentsUseCase(shipmentRepository)
 
     @Bean
-    fun providesSaveShipmentUseCase(
-        shipmentRepository: ShipmentRepository,
-        messageSource: MessageSource
-    ): SaveShipmentUseCase = SaveShipmentUseCase(shipmentRepository, messageSource)
+    fun providesSaveShipmentUseCase(shipmentRepository: ShipmentRepository): SaveShipmentUseCase =
+        SaveShipmentUseCase(shipmentRepository)
+
+    @Bean
+    fun providesUpdateShipmentUseCase(shipmentRepository: ShipmentRepository): UpdateShipmentUseCase =
+        UpdateShipmentUseCase(shipmentRepository)
+
+    @Bean
+    fun providesDeleteShipmentUseCase(shipmentRepository: ShipmentRepository): DeleteShipmentUseCase =
+        DeleteShipmentUseCase(shipmentRepository)
 
 }

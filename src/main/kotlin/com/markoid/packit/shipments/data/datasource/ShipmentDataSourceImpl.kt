@@ -13,8 +13,16 @@ class ShipmentDataSourceImpl(
         return this.shipmentCache.saveOrUpdate(userId, shipments)
     }
 
+    override fun deleteShipmentById(shipId: String): ShipmentEntity? {
+        return this.shipmentDao.deleteShipmentById(shipId)
+    }
+
+    override fun doesUserHaveShipments(userId: String): Boolean {
+        return this.shipmentDao.existsById(userId)
+    }
+
     override fun fetchShipmentsFromDatabaseByUserId(userId: String): List<ShipmentEntity> {
-        return this.shipmentDao.findShipmentByUserId(userId)
+        return this.shipmentDao.findShipmentByUserId(userId) ?: emptyList()
     }
 
     override fun getCachedShipmentsByUserId(userId: String): List<ShipmentEntity> {

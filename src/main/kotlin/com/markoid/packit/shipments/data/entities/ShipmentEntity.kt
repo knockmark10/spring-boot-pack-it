@@ -17,5 +17,5 @@ data class ShipmentEntity(
     var status: ShipmentStatus = ShipmentStatus.Idle,
     @JsonProperty("shipId") @Id var id: String = "",
     var totalDistance: Double = 0.0,
-    var userId: String
+    var userId: String = ""
 )

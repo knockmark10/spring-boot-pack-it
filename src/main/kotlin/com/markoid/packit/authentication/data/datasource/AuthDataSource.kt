@@ -6,6 +6,7 @@ import com.markoid.packit.authentication.data.entities.UserEntity
 interface AuthDataSource {
     fun cacheDriver(driverEntity: DriverEntity): DriverEntity
     fun cacheUser(userEntity: UserEntity): UserEntity
+    fun fetchDriverByUserId(userId: String): DriverEntity?
     fun fetchDriverByEmail(email: String): DriverEntity?
     fun fetchUserByEmail(email: String): UserEntity?
     fun getCachedDriverByEmail(email: String): DriverEntity?

@@ -3,6 +3,8 @@ package com.markoid.packit.shipments.data.repository
 import com.markoid.packit.shipments.data.entities.ShipmentEntity
 
 interface ShipmentRepository {
+    fun deleteShipmentById(shipId: String): Boolean
     fun getShipmentsByUserId(userId: String): List<ShipmentEntity>
-    fun saveShipment(userId: String, shipment: ShipmentEntity): ShipmentEntity
+    fun saveNewShipment(userId: String, shipment: ShipmentEntity): ShipmentEntity
+    fun updateExistingShipment(userId: String, shipment: ShipmentEntity): Boolean
 }

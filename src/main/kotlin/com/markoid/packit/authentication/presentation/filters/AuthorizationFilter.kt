@@ -1,8 +1,7 @@
 package com.markoid.packit.authentication.presentation.filters
 
-import com.markoid.packit.authentication.domain.exceptions.AccessNotGrantedException
-import com.markoid.packit.authentication.domain.exceptions.InvalidTokenException
 import com.markoid.packit.core.presentation.filters.AbstractAuthenticationFilter
+import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
 import com.markoid.packit.core.presentation.utils.ApiConstants
 import com.markoid.packit.core.presentation.utils.ApiConstants.HEADER_LANGUAGE
 import com.markoid.packit.core.presentation.utils.ApiConstants.HEADER_TOKEN
@@ -20,7 +19,7 @@ import javax.servlet.http.HttpServletResponse
 class AuthorizationFilter(
     authManager: AuthenticationManager,
     messageSource: MessageSource
-) : AbstractAuthenticationFilter(authManager, messageSource) {
+) : AbstractAuthenticationFilter(authManager) {
 
     private val endpointsWithNoRequiredToken = listOf(
         ApiConstants.SIGN_IN_URL,
@@ -39,16 +38,12 @@ class AuthorizationFilter(
                 chain.doFilter(request, response)
 
             // Token is null for endpoints with token required, then send custom error
-            token == null ->
-                setErrorResponse(AccessNotGrantedException(getString("ACCESS_NOT_GRANTED", language)), response)
+            token == null -> setErrorResponse(ExceptionDictionary.ACCESS_NOT_GRANTED, response, language)
 
-            // Authenticate existing token
-            else -> {
-                val authentication: UsernamePasswordAuthenticationToken? = authenticate(response, token)
-                authentication?.let {
-                    SecurityContextHolder.getContext().authentication = it
-                    chain.doFilter(request, response)
-                }
+            // Authenticate existing token. It will send error if token has expired or is invalid.
+            else -> authenticate(response, token)?.let {
+                SecurityContextHolder.getContext().authentication = it
+                chain.doFilter(request, response)
             }
         }
     }
@@ -66,7 +61,7 @@ class AuthorizationFilter(
         UsernamePasswordAuthenticationToken(user, null, emptyList())
     } catch (exception: Throwable) {
         // If token is invalid, send error message
-        setErrorResponse(InvalidTokenException(getString("TOKEN_FAILED", language)), response)
+        setErrorResponse(ExceptionDictionary.TOKEN_FAILED, response, language)
         null
     }
 

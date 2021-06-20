@@ -3,27 +3,30 @@ package com.markoid.packit.core.presentation.filters
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.markoid.packit.core.data.ApiState
 import com.markoid.packit.core.data.BaseResponse
-import org.springframework.context.MessageSource
+import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
+import com.markoid.packit.core.presentation.handlers.LocaleResolver
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
-import org.springframework.web.server.ResponseStatusException
 import java.io.IOException
-import java.util.*
 import javax.servlet.http.HttpServletResponse
 
 abstract class AbstractAuthenticationFilter(
-    authManager: AuthenticationManager,
-    private val messageSource: MessageSource
+    authManager: AuthenticationManager
 ) : BasicAuthenticationFilter(authManager) {
 
+    @Autowired
+    private lateinit var localeResolver: LocaleResolver
+
     protected fun setErrorResponse(
-        exception: ResponseStatusException,
-        response: HttpServletResponse
+        dictionary: ExceptionDictionary,
+        response: HttpServletResponse,
+        language: String = "en"
     ) {
-        response.status = exception.status.value()
+        response.status = dictionary.statusCode.value()
         response.contentType = "application/json"
         // A class used for errors
-        val apiError = BaseResponse(ApiState.Error, exception.reason ?: exception.message)
+        val apiError = BaseResponse(ApiState.Error, localeResolver.getString(dictionary, language))
         try {
             val json: String = ObjectMapper().writeValueAsString(apiError)
             response.writer.write(json)
@@ -31,11 +34,5 @@ abstract class AbstractAuthenticationFilter(
             e.printStackTrace()
         }
     }
-
-    /**
-     * Gets a translated string based on the [key] provided.
-     */
-    fun getString(key: String, language: String = "en"): String =
-        this.messageSource.getMessage(key, null, Locale.forLanguageTag(language))
 
 }
