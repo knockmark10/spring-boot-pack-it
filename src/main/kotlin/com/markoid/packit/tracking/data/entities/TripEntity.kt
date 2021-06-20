@@ -8,21 +8,10 @@ import org.springframework.data.mongodb.core.mapping.Field
 @Document("trips")
 data class TripEntity(
     @Field("attachments")
-    private val _attachments: List<AttachmentsEntity>?,
+    val attachments: List<AttachmentsEntity>? = emptyList(),
     @Id val id: ObjectId = ObjectId.get(),
     @Field("driverId")
-    private val _driverId: String?,
+    val driverId: String? = "",
     @Field("status")
-    private val _status: TripStatus?
-) {
-
-    val attachments: List<AttachmentsEntity>
-        get() = _attachments ?: emptyList()
-
-    val driverId: String
-        get() = _driverId ?: ""
-
-    val status: TripStatus
-        get() = _status ?: TripStatus.Unknown
-
-}
+    val status: TripStatus? = TripStatus.Unknown
+) 

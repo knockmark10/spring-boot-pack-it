@@ -6,6 +6,7 @@ import com.markoid.packit.core.domain.exceptions.HttpStatusException
 import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
 import com.markoid.packit.core.presentation.handlers.LocaleResolver
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.server.ResponseStatusException
 
@@ -26,6 +27,10 @@ abstract class BaseUseCase<Result, Params> {
     fun buildOkMessage(dictionary: ExceptionDictionary): ResponseEntity<BaseResponse> = ResponseEntity
         .status(dictionary.statusCode)
         .body(BaseResponse(ApiState.Success, localeResolver.getString(dictionary, language)))
+
+    fun buildResultMessage(result: Result): ResponseEntity<Result> = ResponseEntity
+        .status(HttpStatus.OK)
+        .body(result)
 
     /**
      * Creates a [HttpStatusException] with a translated message for the given [ExceptionDictionary].

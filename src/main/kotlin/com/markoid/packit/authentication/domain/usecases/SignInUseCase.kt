@@ -13,7 +13,6 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.security.Key
@@ -44,7 +43,7 @@ class SignInUseCase(
             )
             else -> throw raiseException(ExceptionDictionary.USER_NOT_FOUND)
         }
-        ResponseEntity.status(HttpStatus.OK).body(result)
+        buildResultMessage(result)
     }
 
     private fun validateRequest(request: SignInRequest, block: (SignInRequest) -> ResponseEntity<SignInResult>) = when {
