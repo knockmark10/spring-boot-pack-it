@@ -4,10 +4,12 @@ import com.markoid.packit.authentication.domain.exceptions.AccessNotGrantedExcep
 import com.markoid.packit.authentication.domain.exceptions.InvalidTokenException
 import com.markoid.packit.core.presentation.filters.AbstractAuthenticationFilter
 import com.markoid.packit.core.presentation.utils.ApiConstants
+import com.markoid.packit.core.presentation.utils.ApiConstants.HEADER_LANGUAGE
+import com.markoid.packit.core.presentation.utils.ApiConstants.HEADER_TOKEN
 import com.markoid.packit.core.presentation.utils.ApiConstants.KEY
-import com.markoid.packit.core.presentation.utils.ApiConstants.TOKEN_HEADER_NAME
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
+import org.springframework.context.MessageSource
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -15,8 +17,10 @@ import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-
-class AuthorizationFilter(authManager: AuthenticationManager) : AbstractAuthenticationFilter(authManager) {
+class AuthorizationFilter(
+    authManager: AuthenticationManager,
+    messageSource: MessageSource
+) : AbstractAuthenticationFilter(authManager, messageSource) {
 
     private val endpointsWithNoRequiredToken = listOf(
         ApiConstants.SIGN_IN_URL,
@@ -25,15 +29,18 @@ class AuthorizationFilter(authManager: AuthenticationManager) : AbstractAuthenti
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
         // Read token from header
-        val token = request.getHeader(TOKEN_HEADER_NAME)
+        val token = request.getHeader(HEADER_TOKEN)
+        // Read language from header
+        val language = request.getHeader(HEADER_LANGUAGE) ?: "en"
 
         when {
-            // There is no token, but it's a request coming from an exempt endpoint
+            // There is no token, but it's a request coming from an exempt endpoint, then let it go through
             token == null && endpointsWithNoRequiredToken.any { request.requestURL.toString().contains(it) } ->
                 chain.doFilter(request, response)
 
-            // Token is null for endpoints with token required
-            token == null -> setErrorResponse(AccessNotGrantedException(), response)
+            // Token is null for endpoints with token required, then send custom error
+            token == null ->
+                setErrorResponse(AccessNotGrantedException(getString("ACCESS_NOT_GRANTED", language)), response)
 
             // Authenticate existing token
             else -> {
@@ -46,7 +53,11 @@ class AuthorizationFilter(authManager: AuthenticationManager) : AbstractAuthenti
         }
     }
 
-    private fun authenticate(response: HttpServletResponse, token: String): UsernamePasswordAuthenticationToken? = try {
+    private fun authenticate(
+        response: HttpServletResponse,
+        token: String,
+        language: String = "en"
+    ): UsernamePasswordAuthenticationToken? = try {
         val user = Jwts.parser()
             .setSigningKey(Keys.hmacShaKeyFor(KEY.toByteArray()))
             .parseClaimsJws(token)
@@ -54,7 +65,8 @@ class AuthorizationFilter(authManager: AuthenticationManager) : AbstractAuthenti
 
         UsernamePasswordAuthenticationToken(user, null, emptyList())
     } catch (exception: Throwable) {
-        setErrorResponse(InvalidTokenException(), response)
+        // If token is invalid, send error message
+        setErrorResponse(InvalidTokenException(getString("TOKEN_FAILED", language)), response)
         null
     }
 

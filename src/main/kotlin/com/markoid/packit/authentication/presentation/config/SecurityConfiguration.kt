@@ -5,6 +5,7 @@ import com.markoid.packit.authentication.presentation.filters.AuthorizationFilte
 import com.markoid.packit.core.presentation.utils.ApiConstants.AUTH_PATH
 import com.markoid.packit.core.presentation.utils.ApiConstants.SIGN_IN_URL
 import com.markoid.packit.core.presentation.utils.ApiConstants.SIGN_UP_URL
+import org.springframework.context.MessageSource
 import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -20,7 +21,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @EnableWebSecurity
 class SecurityConfiguration(
     private val userDetailsService: AppUserDetailsService,
-    private val bCryptPasswordEncoder: BCryptPasswordEncoder
+    private val bCryptPasswordEncoder: BCryptPasswordEncoder,
+    private val messageSource: MessageSource
 ) : WebSecurityConfigurerAdapter() {
 
     @Bean
@@ -37,7 +39,7 @@ class SecurityConfiguration(
             ?.antMatchers(HttpMethod.POST, AUTH_PATH + SIGN_IN_URL)?.permitAll()
             ?.anyRequest()?.authenticated()
             ?.and()
-            ?.addFilter(AuthorizationFilter(authenticationManager()))
+            ?.addFilter(AuthorizationFilter(authenticationManager(), messageSource))
             ?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 

@@ -14,6 +14,7 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
+import org.springframework.context.MessageSource
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -23,10 +24,12 @@ import java.util.*
 
 class SignInUseCase(
     private val authRepository: AuthRepository,
-    private val bCryptPasswordEncoder: BCryptPasswordEncoder
-) : BaseUseCase<SignInResult, SignInRequest>() {
+    private val bCryptPasswordEncoder: BCryptPasswordEncoder,
+    messageSource: MessageSource
+) : BaseUseCase<SignInResult, SignInRequest>(messageSource) {
 
     override fun execute(request: SignInRequest): ResponseEntity<SignInResult> = validateRequest(request) {
+        println(getString("USER_NAME_INVALID"))
         // Search for user. If it's null, search for driver. If it doesn't exist, there is no user in the database.
         val user = this.authRepository.getUserByEmail(it.email) ?: this.authRepository.getDriverByEmail(it.email)
         val result = when (user) {

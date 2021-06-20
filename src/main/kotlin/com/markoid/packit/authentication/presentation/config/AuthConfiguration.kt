@@ -10,6 +10,7 @@ import com.markoid.packit.authentication.data.repository.AuthRepositoryImpl
 import com.markoid.packit.authentication.data.service.AppUserDetailsService
 import com.markoid.packit.authentication.domain.usecases.SignInUseCase
 import com.markoid.packit.authentication.domain.usecases.SignUpUseCase
+import org.springframework.context.MessageSource
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -41,14 +42,16 @@ class AuthConfiguration {
     @Bean
     fun providesSignUpUseCase(
         authRepository: AuthRepository,
-        bCryptPasswordEncoder: BCryptPasswordEncoder
-    ): SignUpUseCase = SignUpUseCase(authRepository, bCryptPasswordEncoder)
+        bCryptPasswordEncoder: BCryptPasswordEncoder,
+        messageSource: MessageSource
+    ): SignUpUseCase = SignUpUseCase(authRepository, bCryptPasswordEncoder, messageSource)
 
     @Bean
     fun providesSignInUseCase(
         authRepository: AuthRepository,
-        bCryptPasswordEncoder: BCryptPasswordEncoder
-    ): SignInUseCase = SignInUseCase(authRepository, bCryptPasswordEncoder)
+        bCryptPasswordEncoder: BCryptPasswordEncoder,
+        messageSource: MessageSource
+    ): SignInUseCase = SignInUseCase(authRepository, bCryptPasswordEncoder, messageSource)
 
     @Bean
     fun providesAppUserDetailsService(authRepository: AuthRepository): AppUserDetailsService =

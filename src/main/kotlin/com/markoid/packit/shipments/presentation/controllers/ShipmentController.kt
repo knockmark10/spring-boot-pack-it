@@ -19,12 +19,14 @@ class ShipmentController(
 
     @GetMapping
     fun getShipmentsByUserId(
-        @RequestHeader(ApiConstants.USER_ID_PARAM, required = false) userId: String?
-    ): ResponseEntity<List<ShipmentEntity>> = this.getShipmentsUseCase.execute(userId)
+        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
+        @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String?
+    ): ResponseEntity<List<ShipmentEntity>> = this.getShipmentsUseCase.setLanguage(language).execute(userId)
 
     @PostMapping
     fun saveShipment(
+        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody request: ShipmentEntity
-    ): ResponseEntity<ShipmentEntity> = this.saveShipmentUseCase.execute(request)
+    ): ResponseEntity<ShipmentEntity> = this.saveShipmentUseCase.setLanguage(language).execute(request)
 
 }
