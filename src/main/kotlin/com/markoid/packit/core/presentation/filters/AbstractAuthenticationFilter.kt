@@ -2,26 +2,24 @@ package com.markoid.packit.core.presentation.filters
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.markoid.packit.core.data.ApiState
+import com.markoid.packit.core.data.AppLanguage
 import com.markoid.packit.core.data.BaseResponse
 import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
 import com.markoid.packit.core.presentation.handlers.LocaleResolver
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import java.io.IOException
 import javax.servlet.http.HttpServletResponse
 
 abstract class AbstractAuthenticationFilter(
-    authManager: AuthenticationManager
+    authManager: AuthenticationManager,
+    private val localeResolver: LocaleResolver
 ) : BasicAuthenticationFilter(authManager) {
-
-    @Autowired
-    private lateinit var localeResolver: LocaleResolver
 
     protected fun setErrorResponse(
         dictionary: ExceptionDictionary,
         response: HttpServletResponse,
-        language: String = "en"
+        language: AppLanguage
     ) {
         response.status = dictionary.statusCode.value()
         response.contentType = "application/json"

@@ -11,7 +11,7 @@ class UpdateShipmentUseCase(
     private val repository: ShipmentRepository
 ) : BaseUseCase<BaseResponse, ShipmentEntity>() {
 
-    override fun execute(request: ShipmentEntity): ResponseEntity<BaseResponse> {
+    override fun postValidatedExecution(request: ShipmentEntity): ResponseEntity<BaseResponse> {
         // Check if shipment was updated
         if (this.repository.updateExistingShipment(request.userId, request)) {
             return buildOkMessage(ExceptionDictionary.SHIPMENT_UPDATE_SUCCESSFUL)

@@ -5,6 +5,7 @@ import com.markoid.packit.authentication.domain.requests.SignUpRequest
 import com.markoid.packit.authentication.domain.results.SignInResult
 import com.markoid.packit.authentication.domain.usecases.SignInUseCase
 import com.markoid.packit.authentication.domain.usecases.SignUpUseCase
+import com.markoid.packit.core.data.AppLanguage
 import com.markoid.packit.core.data.BaseResponse
 import com.markoid.packit.core.presentation.utils.ApiConstants
 import org.springframework.http.ResponseEntity
@@ -21,12 +22,12 @@ class AuthController(
     fun signIn(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody body: SignInRequest
-    ): ResponseEntity<SignInResult> = this.signInUseCase.setLanguage(language).execute(body)
+    ): ResponseEntity<SignInResult> = this.signInUseCase.setLanguage(AppLanguage.forValue(language)).startCommand(body)
 
     @PostMapping(ApiConstants.SIGN_UP_URL)
     fun signUp(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @RequestBody body: SignUpRequest
-    ): ResponseEntity<BaseResponse> = this.signUpUseCase.setLanguage(language).execute(body)
+        @RequestBody body: SignUpRequest?
+    ): ResponseEntity<BaseResponse> = this.signUpUseCase.setLanguage(AppLanguage.forValue(language)).startCommand(body)
 
 }

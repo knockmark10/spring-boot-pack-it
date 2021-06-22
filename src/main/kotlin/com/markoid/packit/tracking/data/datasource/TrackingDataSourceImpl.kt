@@ -11,4 +11,8 @@ class TrackingDataSourceImpl(
         return this.tripDao.save(trip)
     }
 
+    override fun fetchTripById(tripId: String): TripEntity? {
+        return this.tripDao.getTripById(tripId)
+    }
+
 }

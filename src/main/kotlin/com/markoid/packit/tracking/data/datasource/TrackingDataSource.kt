@@ -4,4 +4,5 @@ import com.markoid.packit.tracking.data.entities.TripEntity
 
 interface TrackingDataSource {
     fun createNewTrip(trip: TripEntity): TripEntity
+    fun fetchTripById(tripId: String): TripEntity?
 }

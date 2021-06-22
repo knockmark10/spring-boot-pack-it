@@ -34,6 +34,10 @@ class AuthDataSourceImpl(
         return this.userDao.getUserByEmail(email)
     }
 
+    override fun fetchUserById(userId: String): UserEntity? {
+        return this.userDao.getUserById(userId)
+    }
+
     override fun getCachedDriverByEmail(email: String): DriverEntity? {
         return this.driverCache.getById(email)
     }

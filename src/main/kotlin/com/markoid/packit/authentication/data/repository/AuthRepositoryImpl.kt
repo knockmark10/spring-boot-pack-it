@@ -44,6 +44,11 @@ class AuthRepositoryImpl(
         return user
     }
 
+    override fun getUserById(userId: String): UserEntity? {
+        // Fetch the driver from database, No caching is necessary since the cache is indexed by email
+        return this.authDataSourceImpl.fetchUserById(userId)
+    }
+
     override fun saveDriver(driverEntity: DriverEntity): DriverEntity {
         // Save driver on database
         this.authDataSourceImpl.saveDriverInDatabase(driverEntity)

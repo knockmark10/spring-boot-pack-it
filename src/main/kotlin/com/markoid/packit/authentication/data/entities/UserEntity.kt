@@ -6,11 +6,12 @@ import org.springframework.data.mongodb.core.mapping.Document
 
 @Document("users")
 data class UserEntity(
-    @Id val id: ObjectId = ObjectId.get(),
-    val assignedTrip: String = "",
-    val email: String,
-    val firebaseToken: String = "",
-    val lastName: String,
-    val name: String,
-    val password: String,
-)
+    @Id
+    override val id: ObjectId = ObjectId.get(),
+    var assignedTrip: String = "",
+    override val email: String,
+    override val firebaseToken: String = "",
+    override val lastName: String,
+    override val name: String,
+    override val password: String,
+) : IUserEntity

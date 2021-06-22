@@ -11,28 +11,23 @@ import org.springframework.http.ResponseEntity
 class CreateNewTripUseCase(
     private val authRepository: AuthRepository,
     private val trackingRepository: TrackingRepository
-) : BaseUseCase<TripEntity, CreateNewTripRequest?>() {
+) : BaseUseCase<TripEntity, CreateNewTripRequest>() {
 
-    override fun execute(request: CreateNewTripRequest?): ResponseEntity<TripEntity> =
-        validateRequest(request) {
-            // At this point, the request and its parameters are fully validated
-            val tripEntity = TripEntity(driverId = it.driverId, status = it.tripStatus)
-            // Save trip in system
-            this.trackingRepository.saveTrip(tripEntity)
-            // Create response entity and return it
-            buildResultMessage(tripEntity)
-        }
-
-    private fun validateRequest(
-        request: CreateNewTripRequest?,
-        block: (CreateNewTripRequest) -> ResponseEntity<TripEntity>
-    ): ResponseEntity<TripEntity> = when {
-        request == null ||
-                request.driverId.isNullOrEmpty() ||
+    override fun onValidateRequest(request: CreateNewTripRequest): ValidationStatus = when {
+        request.driverId.isNullOrEmpty() ||
                 request.userId.isNullOrEmpty() ||
                 request.tripStatus == null -> throw raiseException(ExceptionDictionary.MISSING_PARAMETERS)
         doesDriverExist(request.driverId).not() -> throw raiseException(ExceptionDictionary.DRIVER_NOT_FOUND)
-        else -> block.invoke(request)
+        else -> ValidationStatus.Success
+    }
+
+    override fun postValidatedExecution(request: CreateNewTripRequest): ResponseEntity<TripEntity> {
+        // At this point, the request and its parameters are fully validated
+        val tripEntity = TripEntity(driverId = request.driverId, status = request.tripStatus)
+        // Save trip in system
+        this.trackingRepository.saveTrip(tripEntity)
+        // Create response entity and return it
+        return buildResultMessage(tripEntity)
     }
 
     /**

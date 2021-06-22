@@ -9,7 +9,7 @@ class SaveShipmentUseCase(
     private val shipmentRepository: ShipmentRepository,
 ) : BaseUseCase<ShipmentEntity, ShipmentEntity>() {
 
-    override fun execute(request: ShipmentEntity): ResponseEntity<ShipmentEntity> {
+    override fun postValidatedExecution(request: ShipmentEntity): ResponseEntity<ShipmentEntity> {
         val result = this.shipmentRepository.saveNewShipment(request.userId, request)
         return ResponseEntity.ok(result)
     }

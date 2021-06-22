@@ -8,6 +8,7 @@ object ApiConstants {
 
     const val HEADER_TOKEN = "x-access-token"
     const val HEADER_LANGUAGE = "language"
+    const val HEADER_SHIPMENT_ID = "shipid"
     const val HEADER_USER_ID = "userid"
 
     // PATHS
@@ -17,8 +18,10 @@ object ApiConstants {
     const val TRACKING_PATH = "$BASE_PATH/tracking"
 
     // ENDPOINTS
+    const val ATTACH_TRACKER_URL = "/attachTracker"
+    const val BROADCAST_LOCATION_URL = "/broadcastLocation"
+    const val CREATE_TRIP_URL = "/createTrip"
     const val SIGN_IN_URL = "/signIn"
     const val SIGN_UP_URL = "/signUp"
-    const val CREATE_TRIP_URL = "/createTrip"
 
 }

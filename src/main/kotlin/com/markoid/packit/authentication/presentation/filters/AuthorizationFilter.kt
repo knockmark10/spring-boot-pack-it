@@ -1,14 +1,15 @@
 package com.markoid.packit.authentication.presentation.filters
 
+import com.markoid.packit.core.data.AppLanguage
 import com.markoid.packit.core.presentation.filters.AbstractAuthenticationFilter
 import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
+import com.markoid.packit.core.presentation.handlers.LocaleResolver
 import com.markoid.packit.core.presentation.utils.ApiConstants
 import com.markoid.packit.core.presentation.utils.ApiConstants.HEADER_LANGUAGE
 import com.markoid.packit.core.presentation.utils.ApiConstants.HEADER_TOKEN
 import com.markoid.packit.core.presentation.utils.ApiConstants.KEY
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import org.springframework.context.MessageSource
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -18,8 +19,8 @@ import javax.servlet.http.HttpServletResponse
 
 class AuthorizationFilter(
     authManager: AuthenticationManager,
-    messageSource: MessageSource
-) : AbstractAuthenticationFilter(authManager) {
+    localeResolver: LocaleResolver
+) : AbstractAuthenticationFilter(authManager, localeResolver) {
 
     private val endpointsWithNoRequiredToken = listOf(
         ApiConstants.SIGN_IN_URL,
@@ -30,7 +31,9 @@ class AuthorizationFilter(
         // Read token from header
         val token = request.getHeader(HEADER_TOKEN)
         // Read language from header
-        val language = request.getHeader(HEADER_LANGUAGE) ?: "en"
+        val headerLanguage = request.getHeader(HEADER_LANGUAGE) ?: "en"
+        // Resolved language
+        val language = AppLanguage.forValue(headerLanguage)
 
         when {
             // There is no token, but it's a request coming from an exempt endpoint, then let it go through
@@ -41,7 +44,7 @@ class AuthorizationFilter(
             token == null -> setErrorResponse(ExceptionDictionary.ACCESS_NOT_GRANTED, response, language)
 
             // Authenticate existing token. It will send error if token has expired or is invalid.
-            else -> authenticate(response, token)?.let {
+            else -> authenticate(response, token, language)?.let {
                 SecurityContextHolder.getContext().authentication = it
                 chain.doFilter(request, response)
             }
@@ -51,7 +54,7 @@ class AuthorizationFilter(
     private fun authenticate(
         response: HttpServletResponse,
         token: String,
-        language: String = "en"
+        language: AppLanguage
     ): UsernamePasswordAuthenticationToken? = try {
         val user = Jwts.parser()
             .setSigningKey(Keys.hmacShaKeyFor(KEY.toByteArray()))

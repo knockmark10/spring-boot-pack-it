@@ -16,47 +16,50 @@ class SignUpUseCase(
     private val bCryptPasswordEncoder: BCryptPasswordEncoder
 ) : BaseUseCase<BaseResponse, SignUpRequest>() {
 
-    override fun execute(request: SignUpRequest): ResponseEntity<BaseResponse> = when (request.userType) {
-        UserType.User -> createUser(request)
-        UserType.Driver -> createDriver(request)
-    }
+    override fun postValidatedExecution(request: SignUpRequest): ResponseEntity<BaseResponse> {
+        // Look for an user or a driver.
+        val existingUser =
+            this.authRepository.getUserByEmail(request.email!!) ?: this.authRepository.getDriverByEmail(request.email)
 
-    private fun createUser(request: SignUpRequest): ResponseEntity<BaseResponse> {
-        // Check if user is not taken
-        val existingUser = this.authRepository.getUserByEmail(request.email)
-        // If it's null it means it doesn't exist, so we can create one
-        return if (existingUser == null) {
+        // If it's not null it means the desired user is taken. Throw an error based on the user type found.
+        when {
+            existingUser != null && existingUser is UserEntity -> throw raiseException(ExceptionDictionary.USER_ALREADY_EXISTS)
+            existingUser != null && existingUser is DriverEntity -> throw raiseException(ExceptionDictionary.DRIVER_ALREADY_EXISTS)
+        }
+
+        // Create desired user based on the user type provided.
+        return if (request.userType == UserType.User) {
             val user = UserEntity(
                 email = request.email,
-                lastName = request.lastName,
-                name = request.name,
+                lastName = request.lastName!!,
+                name = request.name!!,
                 password = bCryptPasswordEncoder.encode(request.password)
             )
+            // Save user on the system
             this.authRepository.saveUser(user)
+            // Return ok message
             buildOkMessage(ExceptionDictionary.USER_CREATED_SUCCESSFULLY)
         } else {
-            // User is taken. Return an error
-            throw raiseException(ExceptionDictionary.USER_ALREADY_EXISTS)
+            val driver = DriverEntity(
+                email = request.email,
+                lastName = request.lastName!!,
+                name = request.name!!,
+                password = bCryptPasswordEncoder.encode(request.password)
+            )
+            // Save user on the system
+            this.authRepository.saveDriver(driver)
+            // Return ok message
+            buildOkMessage(ExceptionDictionary.DRIVER_CREATED_SUCCESSFULLY)
         }
     }
 
-    private fun createDriver(request: SignUpRequest): ResponseEntity<BaseResponse> {
-        // Check if user is not taken
-        val existingDriver = this.authRepository.getUserByEmail(request.email)
-        // If it's null it means it doesn't exist, so we can create one
-        return if (existingDriver == null) {
-            val driver = DriverEntity(
-                email = request.email,
-                lastName = request.lastName,
-                name = request.name,
-                password = bCryptPasswordEncoder.encode(request.password)
-            )
-            this.authRepository.saveDriver(driver)
-            buildOkMessage(ExceptionDictionary.DRIVER_CREATED_SUCCESSFULLY)
-        } else {
-            // User is taken. Return an error
-            throw raiseException(ExceptionDictionary.DRIVER_ALREADY_EXISTS)
-        }
+    override fun onValidateRequest(request: SignUpRequest): ValidationStatus = when {
+        request.name.isNullOrEmpty() ||
+                request.lastName.isNullOrEmpty() ||
+                request.email.isNullOrEmpty() ||
+                request.password.isNullOrEmpty() ||
+                request.userType == null -> ValidationStatus.Failure(ExceptionDictionary.MISSING_PARAMETERS)
+        else -> ValidationStatus.Success
     }
 
 }

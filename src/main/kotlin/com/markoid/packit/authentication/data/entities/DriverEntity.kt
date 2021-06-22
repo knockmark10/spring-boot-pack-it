@@ -6,10 +6,11 @@ import org.springframework.data.mongodb.core.mapping.Document
 
 @Document("drivers")
 data class DriverEntity(
-    @Id val id: ObjectId = ObjectId.get(),
-    val email: String,
-    val firebaseToken: String = "",
-    val lastName: String,
-    val name: String,
-    val password: String
-)
+    @Id
+    override val id: ObjectId = ObjectId.get(),
+    override val email: String,
+    override val firebaseToken: String = "",
+    override val lastName: String,
+    override val name: String,
+    override val password: String
+) : IUserEntity

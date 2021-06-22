@@ -2,6 +2,7 @@ package com.markoid.packit.authentication.presentation.config
 
 import com.markoid.packit.authentication.data.service.AppUserDetailsService
 import com.markoid.packit.authentication.presentation.filters.AuthorizationFilter
+import com.markoid.packit.core.presentation.handlers.LocaleResolver
 import com.markoid.packit.core.presentation.utils.ApiConstants.AUTH_PATH
 import com.markoid.packit.core.presentation.utils.ApiConstants.SIGN_IN_URL
 import com.markoid.packit.core.presentation.utils.ApiConstants.SIGN_UP_URL
@@ -22,7 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 class SecurityConfiguration(
     private val userDetailsService: AppUserDetailsService,
     private val bCryptPasswordEncoder: BCryptPasswordEncoder,
-    private val messageSource: MessageSource
+    private val localeResolver: LocaleResolver
 ) : WebSecurityConfigurerAdapter() {
 
     @Bean
@@ -39,7 +40,7 @@ class SecurityConfiguration(
             ?.antMatchers(HttpMethod.POST, AUTH_PATH + SIGN_IN_URL)?.permitAll()
             ?.anyRequest()?.authenticated()
             ?.and()
-            ?.addFilter(AuthorizationFilter(authenticationManager(), messageSource))
+            ?.addFilter(AuthorizationFilter(authenticationManager(), localeResolver))
             ?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 

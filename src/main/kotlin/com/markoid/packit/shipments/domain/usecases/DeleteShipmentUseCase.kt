@@ -11,7 +11,7 @@ class DeleteShipmentUseCase(
     private val shipmentRepository: ShipmentRepository,
 ) : BaseUseCase<BaseResponse, ShipmentEntity>() {
 
-    override fun execute(request: ShipmentEntity): ResponseEntity<BaseResponse> {
+    override fun postValidatedExecution(request: ShipmentEntity): ResponseEntity<BaseResponse> {
         val wasDeleted = this.shipmentRepository.deleteShipmentById(request.shipId)
         if (wasDeleted) {
             return buildOkMessage(ExceptionDictionary.SHIPMENT_DELETION_SUCCESSFUL)

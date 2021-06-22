@@ -10,7 +10,7 @@ class GetShipmentsUseCase(
     private val shipmentRepository: ShipmentRepository
 ) : BaseUseCase<List<ShipmentEntity>, String?>() {
 
-    override fun execute(request: String?): ResponseEntity<List<ShipmentEntity>> {
+    override fun postValidatedExecution(request: String?): ResponseEntity<List<ShipmentEntity>> {
         // If there is no user id from the header, throw an exception
         if (request.isNullOrEmpty()) throw raiseException(ExceptionDictionary.MISSING_PARAMETERS)
         // Get shipments with the user id provided

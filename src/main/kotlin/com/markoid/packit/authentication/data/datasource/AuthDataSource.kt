@@ -9,6 +9,7 @@ interface AuthDataSource {
     fun fetchDriverByUserId(userId: String): DriverEntity?
     fun fetchDriverByEmail(email: String): DriverEntity?
     fun fetchUserByEmail(email: String): UserEntity?
+    fun fetchUserById(userId: String): UserEntity?
     fun getCachedDriverByEmail(email: String): DriverEntity?
     fun getCachedUserByEmail(email: String): UserEntity?
     fun saveDriverInDatabase(driverEntity: DriverEntity): DriverEntity

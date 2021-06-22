@@ -7,6 +7,10 @@ class TrackingRepositoryImpl(
     private val trackingDataSourceImpl: TrackingDataSourceImpl
 ) : TrackingRepository {
 
+    override fun getTripById(id: String): TripEntity? {
+        return this.trackingDataSourceImpl.fetchTripById(id)
+    }
+
     override fun saveTrip(trip: TripEntity): TripEntity {
         return this.trackingDataSourceImpl.createNewTrip(trip)
     }

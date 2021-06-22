@@ -13,8 +13,10 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpStatusException::class)
     fun handleExceptions(exception: Throwable): ResponseEntity<BaseResponse> = when (exception) {
-        is HttpStatusException -> ResponseEntity.status(exception.status)
-            .body(BaseResponse(ApiState.Error, exception.reason ?: exception.message))
+        is HttpStatusException -> {
+            ResponseEntity.status(exception.status)
+                .body(BaseResponse(ApiState.Error, exception.reason ?: exception.message))
+        }
         else -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(BaseResponse(ApiState.Error, "Server is not available at the moment."))
     }

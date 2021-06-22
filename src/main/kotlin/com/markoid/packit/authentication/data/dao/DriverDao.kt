@@ -9,7 +9,7 @@ interface DriverDao : MongoRepository<DriverEntity, String> {
     @Query("{ 'email': ?0 }")
     fun getDriverByEmail(email: String): DriverEntity?
 
-    @Query("{ 'userId': ?0 }")
+    @Query("{ '_id': ?0 }")
     fun getDriverByUserId(userId: String): DriverEntity?
 
 }

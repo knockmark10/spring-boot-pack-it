@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Field
 @Document("trips")
 data class TripEntity(
     @Field("attachments")
-    val attachments: List<AttachmentsEntity>? = emptyList(),
+    var attachments: MutableList<AttachmentsEntity> = mutableListOf(),
     @Id val id: ObjectId = ObjectId.get(),
     @Field("driverId")
     val driverId: String? = "",
