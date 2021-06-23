@@ -4,18 +4,19 @@ import com.markoid.packit.core.domain.usecases.BaseUseCase
 import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
 import com.markoid.packit.shipments.data.entities.ShipmentEntity
 import com.markoid.packit.shipments.data.repository.ShipmentRepository
-import org.springframework.http.ResponseEntity
 
 class GetShipmentsUseCase(
     private val shipmentRepository: ShipmentRepository
 ) : BaseUseCase<List<ShipmentEntity>, String?>() {
 
-    override fun postValidatedExecution(request: String?): ResponseEntity<List<ShipmentEntity>> {
-        // If there is no user id from the header, throw an exception
-        if (request.isNullOrEmpty()) throw raiseException(ExceptionDictionary.MISSING_PARAMETERS)
-        // Get shipments with the user id provided
-        val shipments = this.shipmentRepository.getShipmentsByUserId(request)
-        return ResponseEntity.ok(shipments)
-    }
+    override fun onValidateRequest(request: String?): ValidationStatus =
+        if (request.isNullOrEmpty()) ValidationStatus.Failure(ExceptionDictionary.MISSING_PARAMETERS)
+        else ValidationStatus.Success
+
+    /**
+     * Get the shipments with the user id provided
+     */
+    override fun postValidatedExecution(request: String?): List<ShipmentEntity> =
+        this.shipmentRepository.getShipmentsByUserId(request!!)
 
 }

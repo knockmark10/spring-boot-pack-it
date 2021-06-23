@@ -12,7 +12,6 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
-import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.security.Key
 import java.util.*
@@ -22,7 +21,7 @@ class SignInUseCase(
     private val bCryptPasswordEncoder: BCryptPasswordEncoder
 ) : BaseUseCase<SignInResult, SignInRequest>() {
 
-    override fun postValidatedExecution(request: SignInRequest): ResponseEntity<SignInResult> {
+    override fun postValidatedExecution(request: SignInRequest): SignInResult {
         // Search for user or driver. If it's not found, throw an error
         val user = this.authRepository.getUserByEmail(request?.email!!)
             ?: this.authRepository.getDriverByEmail(request.email!!)
@@ -33,15 +32,13 @@ class SignInUseCase(
             throw raiseException(ExceptionDictionary.INVALID_CREDENTIALS)
 
         // Create a result object
-        val result = SignInResult(
+        return SignInResult(
             id = user.id.toHexString(),
             name = user.name,
             lastName = user.lastName,
             token = generateJsonWebToken(user.email),
             userType = if (user is UserEntity) UserType.User else UserType.Driver
         )
-
-        return buildResultMessage(result)
     }
 
     override fun onValidateRequest(request: SignInRequest): ValidationStatus = when {

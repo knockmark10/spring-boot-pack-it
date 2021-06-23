@@ -6,7 +6,6 @@ import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
 import com.markoid.packit.tracking.data.entities.TripEntity
 import com.markoid.packit.tracking.data.repository.TrackingRepository
 import com.markoid.packit.tracking.domain.usecases.request.CreateNewTripRequest
-import org.springframework.http.ResponseEntity
 
 class CreateNewTripUseCase(
     private val authRepository: AuthRepository,
@@ -21,13 +20,13 @@ class CreateNewTripUseCase(
         else -> ValidationStatus.Success
     }
 
-    override fun postValidatedExecution(request: CreateNewTripRequest): ResponseEntity<TripEntity> {
+    override fun postValidatedExecution(request: CreateNewTripRequest): TripEntity {
         // At this point, the request and its parameters are fully validated
         val tripEntity = TripEntity(driverId = request.driverId, status = request.tripStatus)
         // Save trip in system
         this.trackingRepository.saveTrip(tripEntity)
         // Create response entity and return it
-        return buildResultMessage(tripEntity)
+        return tripEntity
     }
 
     /**

@@ -9,7 +9,6 @@ import com.markoid.packit.tracking.data.entities.AttachmentsEntity
 import com.markoid.packit.tracking.data.entities.TripEntity
 import com.markoid.packit.tracking.data.repository.TrackingRepository
 import com.markoid.packit.tracking.domain.usecases.request.AttachTrackerRequest
-import org.springframework.http.ResponseEntity
 
 class AttachTrackerUseCase(
     private val authRepository: AuthRepository,
@@ -27,7 +26,7 @@ class AttachTrackerUseCase(
         else -> ValidationStatus.Success
     }
 
-    override fun postValidatedExecution(request: AttachTrackerRequest): ResponseEntity<BaseResponse> {
+    override fun postValidatedExecution(request: AttachTrackerRequest): BaseResponse {
         // Check if user exists. Throw error otherwise
         val user =
             this.authRepository.getUserById(request.userId!!)

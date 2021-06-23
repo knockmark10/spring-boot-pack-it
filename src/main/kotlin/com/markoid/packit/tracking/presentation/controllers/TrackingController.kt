@@ -8,6 +8,7 @@ import com.markoid.packit.tracking.domain.usecases.request.AttachTrackerRequest
 import com.markoid.packit.tracking.domain.usecases.request.BroadcastLocationRequest
 import com.markoid.packit.tracking.domain.usecases.request.CreateNewTripRequest
 import com.markoid.packit.tracking.domain.usecases.results.TripResult
+import com.markoid.packit.tracking.domain.usecases.results.UpdateTripRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -18,7 +19,8 @@ class TrackingController(
     private val broadcastLocationUseCase: BroadcastLocationUseCase,
     private val createNewTripUseCase: CreateNewTripUseCase,
     private val getActiveTripByDriverIdUseCase: GetActiveTripByDriveIdUseCase,
-    private val getAttachedShipmentUseCase: GetAttachedShipmentUseCase
+    private val getAttachedShipmentUseCase: GetAttachedShipmentUseCase,
+    private val updateTripStatusUseCase: UpdateTripStatusUseCase
 ) {
 
     @PostMapping(ApiConstants.ATTACH_TRACKER_URL)
@@ -57,16 +59,22 @@ class TrackingController(
         .setLanguage(language)
         .startCommand(body?.copy(userId = userId))
 
-    @GetMapping(ApiConstants.GET_ACTIVE_TRIP_BY_DRIVER_ID)
+    @GetMapping(ApiConstants.GET_ACTIVE_TRIP_BY_DRIVER_ID_URL)
     fun getActiveTripByDriverId(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestParam("driverId") driverId: String?
     ): ResponseEntity<TripResult> = this.getActiveTripByDriverIdUseCase.setLanguage(language).startCommand(driverId)
 
-    @GetMapping(ApiConstants.GET_ATTACHED_SHIPMENT)
+    @GetMapping(ApiConstants.GET_ATTACHED_SHIPMENT_URL)
     fun getAttachedShipment(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestParam("userId") userId: String?
     ): ResponseEntity<Map<String, String>> = this.getAttachedShipmentUseCase.setLanguage(language).startCommand(userId)
+
+    @PutMapping(ApiConstants.UPDATE_TRIP_STATUS_URL)
+    fun updateTripStatus(
+        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
+        @RequestBody body: UpdateTripRequest?
+    ): ResponseEntity<BaseResponse> = this.updateTripStatusUseCase.setLanguage(language).startCommand(body)
 
 }

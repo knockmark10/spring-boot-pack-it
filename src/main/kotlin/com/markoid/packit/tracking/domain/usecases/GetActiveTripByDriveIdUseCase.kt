@@ -10,7 +10,6 @@ import com.markoid.packit.tracking.data.entities.TripStatus
 import com.markoid.packit.tracking.data.repository.TrackingRepository
 import com.markoid.packit.tracking.domain.usecases.results.ShipmentResult
 import com.markoid.packit.tracking.domain.usecases.results.TripResult
-import org.springframework.http.ResponseEntity
 
 class GetActiveTripByDriveIdUseCase(
     private val authRepository: AuthRepository,
@@ -23,9 +22,10 @@ class GetActiveTripByDriveIdUseCase(
         else -> ValidationStatus.Success
     }
 
-    override fun postValidatedExecution(driverId: String): ResponseEntity<TripResult> {
+    override fun postValidatedExecution(driverId: String): TripResult {
         // Get the trip with the driver associated
-        val trip = trackingRepository.getTripByDriverId(driverId) ?: throw raiseException(ExceptionDictionary.TRIP_NOT_FOUND)
+        val trip =
+            trackingRepository.getTripByDriverId(driverId) ?: throw raiseException(ExceptionDictionary.TRIP_NOT_FOUND)
 
         // The trip should be active or inactive
         if (trip.status == null || trip.status == TripStatus.Archived)
@@ -34,14 +34,12 @@ class GetActiveTripByDriveIdUseCase(
         // Build the shipment list from the trip attachments
         val shipments = buildShipmentList(trip.attachments)
 
-        // Build return object
-        val result = TripResult(
+        // Return proper object
+        return TripResult(
             tripId = trip.id.toHexString(),
             status = trip.status,
             shipments = shipments
         )
-
-        return buildResultMessage(result)
     }
 
     private fun buildShipmentList(attachments: List<AttachmentsEntity>): List<ShipmentResult> {

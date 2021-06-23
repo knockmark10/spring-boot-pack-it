@@ -4,7 +4,6 @@ import com.markoid.packit.authentication.data.repository.AuthRepository
 import com.markoid.packit.core.domain.usecases.BaseUseCase
 import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
 import com.markoid.packit.tracking.data.repository.TrackingRepository
-import org.springframework.http.ResponseEntity
 
 class GetAttachedShipmentUseCase(
     private val authRepository: AuthRepository,
@@ -15,7 +14,7 @@ class GetAttachedShipmentUseCase(
         if (userId.isEmpty()) ValidationStatus.Failure(ExceptionDictionary.MISSING_PARAMETERS)
         else ValidationStatus.Success
 
-    override fun postValidatedExecution(userId: String): ResponseEntity<Map<String, String>> {
+    override fun postValidatedExecution(userId: String): Map<String, String> {
         // Search user by userId
         val user = this.authRepository.getUserById(userId) ?: throw raiseException(ExceptionDictionary.USER_NOT_FOUND)
 
@@ -31,7 +30,7 @@ class GetAttachedShipmentUseCase(
         val shipMap = LinkedHashMap<String, String>()
         shipMap["shipId"] = shipId
 
-        return buildResultMessage(shipMap)
+        return shipMap
     }
 
 }

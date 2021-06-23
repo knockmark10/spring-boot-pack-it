@@ -21,8 +21,9 @@ object ApiConstants {
     const val ATTACH_TRACKER_URL = "/attachTracker"
     const val BROADCAST_LOCATION_URL = "/broadcastLocation"
     const val CREATE_TRIP_URL = "/createTrip"
-    const val GET_ACTIVE_TRIP_BY_DRIVER_ID = "/getActiveTripByDriverId"
-    const val GET_ATTACHED_SHIPMENT = "/getAttachedShipment"
+    const val GET_ACTIVE_TRIP_BY_DRIVER_ID_URL = "/getActiveTripByDriverId"
+    const val GET_ATTACHED_SHIPMENT_URL = "/getAttachedShipment"
+    const val UPDATE_TRIP_STATUS_URL = "/updateTripStatus"
     const val SIGN_IN_URL = "/signIn"
     const val SIGN_UP_URL = "/signUp"
 

@@ -27,7 +27,7 @@ class BroadcastLocationUseCase(
         else -> ValidationStatus.Success
     }
 
-    override fun postValidatedExecution(request: BroadcastLocationRequest): ResponseEntity<BaseResponse> {
+    override fun postValidatedExecution(request: BroadcastLocationRequest): BaseResponse {
         // Request has been validated at this point, so null asserted is safe
         val history = HistoryEntity(
             address = request.address ?: "",

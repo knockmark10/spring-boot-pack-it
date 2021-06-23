@@ -27,7 +27,7 @@ abstract class BaseUseCase<Result, Params> {
      * This will be executed after [onValidateRequest] has been called. This will ensure that the [request] object
      * will be validated properly.
      */
-    protected abstract fun postValidatedExecution(request: Params): ResponseEntity<Result>
+    protected abstract fun postValidatedExecution(request: Params): Result
 
     /**
      * This method will be called before [startCommand], and it will be used to validate the request passed to the
@@ -52,8 +52,8 @@ abstract class BaseUseCase<Result, Params> {
         val validationStatus = onValidateRequest(request)
         if (validationStatus is ValidationStatus.Failure) throw raiseException(validationStatus.exception)
 
-        // Validation succeeded. We can proceed to execute the use case
-        postValidatedExecution(request)
+        // Validation succeeded. We can proceed to execute the use case. Wrap the return object into a response entity.
+        buildResultMessage(postValidatedExecution(request))
     } catch (exception: Throwable) {
         // We need to filter out HTTP status exceptions. If we receive one, we must throw it as received.
         // Otherwise [HttpStatus.INTERNAL_SERVER_ERROR] will be thrown.
@@ -70,18 +70,17 @@ abstract class BaseUseCase<Result, Params> {
         return this
     }
 
-    protected fun buildOkMessage(dictionary: ExceptionDictionary): ResponseEntity<BaseResponse> = ResponseEntity
-        .status(dictionary.statusCode)
-        .body(BaseResponse(ApiState.Success, localeResolver.getString(dictionary, language)))
-
-    protected fun buildResultMessage(result: Result): ResponseEntity<Result> = ResponseEntity
-        .status(HttpStatus.OK)
-        .body(result)
+    protected fun buildOkMessage(dictionary: ExceptionDictionary): BaseResponse =
+        BaseResponse(ApiState.Success, localeResolver.getString(dictionary, language))
 
     /**
      * Creates a [HttpStatusException] with a translated message for the given [ExceptionDictionary].
      */
     protected fun raiseException(dictionary: ExceptionDictionary): ResponseStatusException =
         HttpStatusException(dictionary.statusCode, localeResolver.getString(dictionary, language))
+
+    private fun buildResultMessage(result: Result): ResponseEntity<Result> = ResponseEntity
+        .status(HttpStatus.OK)
+        .body(result)
 
 }

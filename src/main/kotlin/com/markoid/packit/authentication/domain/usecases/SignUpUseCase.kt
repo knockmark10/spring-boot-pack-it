@@ -16,7 +16,7 @@ class SignUpUseCase(
     private val bCryptPasswordEncoder: BCryptPasswordEncoder
 ) : BaseUseCase<BaseResponse, SignUpRequest>() {
 
-    override fun postValidatedExecution(request: SignUpRequest): ResponseEntity<BaseResponse> {
+    override fun postValidatedExecution(request: SignUpRequest): BaseResponse {
         // Look for an user or a driver.
         val existingUser =
             this.authRepository.getUserByEmail(request.email!!) ?: this.authRepository.getDriverByEmail(request.email)
