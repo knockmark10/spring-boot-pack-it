@@ -12,6 +12,10 @@ class ShipmentRepositoryImpl(
         return shipmentDeleted != null
     }
 
+    override fun getShipmentByShipId(shipId: String): ShipmentEntity? {
+        return this.shipmentDataSource.fetchShipmentFromDatabaseByShipId(shipId)
+    }
+
     /**
      * Gets the user's shipments. Caching technique is implemented so that we have the cache always up-to-date and to
      * improve performance. Shipment will be looked up in the cache. If it's there, that shipment list will be retrieved.

@@ -13,5 +13,5 @@ data class TripEntity(
     @Field("driverId")
     val driverId: String? = "",
     @Field("status")
-    val status: TripStatus? = TripStatus.Unknown
+    val status: TripStatus?
 ) 

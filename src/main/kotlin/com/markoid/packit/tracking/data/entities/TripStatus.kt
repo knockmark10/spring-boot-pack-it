@@ -31,9 +31,4 @@ enum class TripStatus {
      */
     Archived,
 
-    /**
-     * Default status to indicate that there is no status provided from the client
-     */
-    Unknown
-
 }

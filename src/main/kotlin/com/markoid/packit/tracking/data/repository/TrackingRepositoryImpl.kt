@@ -11,6 +11,10 @@ class TrackingRepositoryImpl(
         return this.trackingDataSourceImpl.fetchTripById(id)
     }
 
+    override fun getTripByDriverId(driverId: String): TripEntity? {
+        return this.trackingDataSourceImpl.fetchTripByDriverId(driverId)
+    }
+
     override fun saveTrip(trip: TripEntity): TripEntity {
         return this.trackingDataSourceImpl.createNewTrip(trip)
     }

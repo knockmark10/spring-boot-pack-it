@@ -21,6 +21,10 @@ class ShipmentDataSourceImpl(
         return this.shipmentDao.existsById(userId)
     }
 
+    override fun fetchShipmentFromDatabaseByShipId(shipId: String): ShipmentEntity? {
+        return this.shipmentDao.findShipmentByShipId(shipId)
+    }
+
     override fun fetchShipmentsFromDatabaseByUserId(userId: String): List<ShipmentEntity> {
         return this.shipmentDao.findShipmentByUserId(userId) ?: emptyList()
     }

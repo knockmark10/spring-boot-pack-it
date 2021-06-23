@@ -52,7 +52,7 @@ class AttachTrackerUseCase(
      */
     private fun appendUserShipmentsToTheTrip(request: AttachTrackerRequest, trip: TripEntity, userEntity: UserEntity) {
         // Create user's attachments
-        val userAttachments = AttachmentsEntity(shipmentId = request.shipId, userId = request.userId)
+        val userAttachments = AttachmentsEntity(shipmentId = request.shipId!!, userId = request.userId!!)
         // Check if user's shipment has not been attached previously
         val shipmentAlreadyAttached = trip.attachments.any { it.shipmentId == userAttachments.shipmentId }
         if (shipmentAlreadyAttached) {

@@ -1,13 +1,12 @@
 package com.markoid.packit.tracking.presentation.config
 
 import com.markoid.packit.authentication.data.repository.AuthRepository
+import com.markoid.packit.shipments.data.repository.ShipmentRepository
 import com.markoid.packit.tracking.data.dao.TripDao
 import com.markoid.packit.tracking.data.datasource.TrackingDataSourceImpl
 import com.markoid.packit.tracking.data.repository.TrackingRepository
 import com.markoid.packit.tracking.data.repository.TrackingRepositoryImpl
-import com.markoid.packit.tracking.domain.usecases.AttachTrackerUseCase
-import com.markoid.packit.tracking.domain.usecases.BroadcastLocationUseCase
-import com.markoid.packit.tracking.domain.usecases.CreateNewTripUseCase
+import com.markoid.packit.tracking.domain.usecases.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -36,5 +35,20 @@ class TrackingConfiguration {
         authRepository: AuthRepository,
         trackingRepository: TrackingRepository
     ): CreateNewTripUseCase = CreateNewTripUseCase(authRepository, trackingRepository)
+
+    @Bean
+    fun providesGetActiveTripByIdUseCase(
+        authRepository: AuthRepository,
+        shipmentRepository: ShipmentRepository,
+        trackingRepository: TrackingRepository
+    ): GetActiveTripByDriveIdUseCase =
+        GetActiveTripByDriveIdUseCase(authRepository, shipmentRepository, trackingRepository)
+
+    @Bean
+    fun providesGetAttachedShipmentUseCase(
+        authRepository: AuthRepository,
+        trackingRepository: TrackingRepository
+    ): GetAttachedShipmentUseCase =
+        GetAttachedShipmentUseCase(authRepository, trackingRepository)
 
 }

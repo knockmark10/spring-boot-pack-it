@@ -22,12 +22,12 @@ class AuthController(
     fun signIn(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody body: SignInRequest
-    ): ResponseEntity<SignInResult> = this.signInUseCase.setLanguage(AppLanguage.forValue(language)).startCommand(body)
+    ): ResponseEntity<SignInResult> = this.signInUseCase.setLanguage(language).startCommand(body)
 
     @PostMapping(ApiConstants.SIGN_UP_URL)
     fun signUp(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody body: SignUpRequest?
-    ): ResponseEntity<BaseResponse> = this.signUpUseCase.setLanguage(AppLanguage.forValue(language)).startCommand(body)
+    ): ResponseEntity<BaseResponse> = this.signUpUseCase.setLanguage(language).startCommand(body)
 
 }

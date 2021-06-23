@@ -18,6 +18,11 @@ abstract class BaseUseCase<Result, Params> {
 
     private var language: AppLanguage = AppLanguage.ENGLISH
 
+    sealed class ValidationStatus {
+        object Success : ValidationStatus()
+        data class Failure(val exception: ExceptionDictionary) : ValidationStatus()
+    }
+
     /**
      * This will be executed after [onValidateRequest] has been called. This will ensure that the [request] object
      * will be validated properly.
@@ -60,8 +65,8 @@ abstract class BaseUseCase<Result, Params> {
      * Set the [language] from the supported [AppLanguage] available. This will make sure that all the messages returned
      * by this use case will be properly translated.
      */
-    open fun setLanguage(language: AppLanguage): BaseUseCase<Result, Params> {
-        this.language = language
+    open fun setLanguage(language: String): BaseUseCase<Result, Params> {
+        this.language = AppLanguage.forValue(language)
         return this
     }
 
@@ -72,11 +77,6 @@ abstract class BaseUseCase<Result, Params> {
     protected fun buildResultMessage(result: Result): ResponseEntity<Result> = ResponseEntity
         .status(HttpStatus.OK)
         .body(result)
-
-    sealed class ValidationStatus {
-        object Success : ValidationStatus()
-        data class Failure(val exception: ExceptionDictionary) : ValidationStatus()
-    }
 
     /**
      * Creates a [HttpStatusException] with a translated message for the given [ExceptionDictionary].

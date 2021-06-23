@@ -1,6 +1,5 @@
 package com.markoid.packit.shipments.presentation.controllers
 
-import com.markoid.packit.core.data.AppLanguage
 import com.markoid.packit.core.data.BaseResponse
 import com.markoid.packit.core.presentation.utils.ApiConstants
 import com.markoid.packit.shipments.data.entities.ShipmentEntity
@@ -28,22 +27,21 @@ class ShipmentController(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String,
         @RequestBody request: ShipmentEntity
-    ): ResponseEntity<BaseResponse> = this.deleteShipmentUseCase.setLanguage(AppLanguage.forValue(language))
+    ): ResponseEntity<BaseResponse> = this.deleteShipmentUseCase.setLanguage(language)
         .startCommand(request.copy(userId = userId))
 
     @GetMapping
     fun getShipmentsByUserId(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String?
-    ): ResponseEntity<List<ShipmentEntity>> = this.getShipmentsUseCase.setLanguage(AppLanguage.forValue(language))
-        .startCommand(userId)
+    ): ResponseEntity<List<ShipmentEntity>> = this.getShipmentsUseCase.setLanguage(language).startCommand(userId)
 
     @PostMapping
     fun saveNewShipment(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String,
         @RequestBody request: ShipmentEntity
-    ): ResponseEntity<ShipmentEntity> = this.saveShipmentUseCase.setLanguage(AppLanguage.forValue(language))
+    ): ResponseEntity<ShipmentEntity> = this.saveShipmentUseCase.setLanguage(language)
         .startCommand(request.copy(userId = userId))
 
     @PutMapping
@@ -51,7 +49,7 @@ class ShipmentController(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String,
         @RequestBody request: ShipmentEntity
-    ): ResponseEntity<BaseResponse> = this.updateShipmentUseCase.setLanguage(AppLanguage.forValue(language))
+    ): ResponseEntity<BaseResponse> = this.updateShipmentUseCase.setLanguage(language)
         .startCommand(request.copy(userId = userId))
 
 }

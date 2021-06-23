@@ -1,15 +1,13 @@
 package com.markoid.packit.tracking.presentation.controllers
 
-import com.markoid.packit.core.data.AppLanguage
 import com.markoid.packit.core.data.BaseResponse
 import com.markoid.packit.core.presentation.utils.ApiConstants
 import com.markoid.packit.tracking.data.entities.TripEntity
-import com.markoid.packit.tracking.domain.usecases.AttachTrackerUseCase
-import com.markoid.packit.tracking.domain.usecases.BroadcastLocationUseCase
-import com.markoid.packit.tracking.domain.usecases.CreateNewTripUseCase
+import com.markoid.packit.tracking.domain.usecases.*
 import com.markoid.packit.tracking.domain.usecases.request.AttachTrackerRequest
 import com.markoid.packit.tracking.domain.usecases.request.BroadcastLocationRequest
 import com.markoid.packit.tracking.domain.usecases.request.CreateNewTripRequest
+import com.markoid.packit.tracking.domain.usecases.results.TripResult
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -18,16 +16,16 @@ import org.springframework.web.bind.annotation.*
 class TrackingController(
     private val attachTrackerUseCase: AttachTrackerUseCase,
     private val broadcastLocationUseCase: BroadcastLocationUseCase,
-    private val createNewTripUseCase: CreateNewTripUseCase
+    private val createNewTripUseCase: CreateNewTripUseCase,
+    private val getActiveTripByDriverIdUseCase: GetActiveTripByDriveIdUseCase,
+    private val getAttachedShipmentUseCase: GetAttachedShipmentUseCase
 ) {
 
     @PostMapping(ApiConstants.ATTACH_TRACKER_URL)
     fun attachTracker(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody body: AttachTrackerRequest?
-    ): ResponseEntity<BaseResponse> = this.attachTrackerUseCase
-        .setLanguage(AppLanguage.forValue(language))
-        .startCommand(body)
+    ): ResponseEntity<BaseResponse> = this.attachTrackerUseCase.setLanguage(language).startCommand(body)
 
     @PostMapping(ApiConstants.BROADCAST_LOCATION_URL)
     fun broadcastLocation(
@@ -47,7 +45,7 @@ class TrackingController(
             body?.tripId,
             body?.userId
         )
-        return this.broadcastLocationUseCase.setLanguage(AppLanguage.forValue(language)).startCommand(request)
+        return this.broadcastLocationUseCase.setLanguage(language).startCommand(request)
     }
 
     @PostMapping(ApiConstants.CREATE_TRIP_URL)
@@ -56,7 +54,19 @@ class TrackingController(
         @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String,
         @RequestBody body: CreateNewTripRequest?
     ): ResponseEntity<TripEntity> = this.createNewTripUseCase
-        .setLanguage(AppLanguage.forValue(language))
+        .setLanguage(language)
         .startCommand(body?.copy(userId = userId))
+
+    @GetMapping(ApiConstants.GET_ACTIVE_TRIP_BY_DRIVER_ID)
+    fun getActiveTripByDriverId(
+        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
+        @RequestParam("driverId") driverId: String?
+    ): ResponseEntity<TripResult> = this.getActiveTripByDriverIdUseCase.setLanguage(language).startCommand(driverId)
+
+    @GetMapping(ApiConstants.GET_ATTACHED_SHIPMENT)
+    fun getAttachedShipment(
+        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
+        @RequestParam("userId") userId: String?
+    ): ResponseEntity<Map<String, String>> = this.getAttachedShipmentUseCase.setLanguage(language).startCommand(userId)
 
 }

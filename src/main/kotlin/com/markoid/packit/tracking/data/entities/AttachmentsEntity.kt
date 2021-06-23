@@ -6,9 +6,9 @@ import org.springframework.data.mongodb.core.mapping.Field
 data class AttachmentsEntity(
     @JsonProperty("shipId")
     @Field("shipId")
-    val shipmentId: String? = null,
+    val shipmentId: String,
     @Field("userId")
-    val userId: String? = null,
+    val userId: String,
     @JsonProperty("history")
     @Field("history")
     val historyList: MutableList<HistoryEntity> = mutableListOf()
