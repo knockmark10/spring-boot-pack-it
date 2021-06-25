@@ -56,10 +56,12 @@ abstract class BaseUseCase<Result, Params> {
 
         // Validation succeeded. We can proceed to execute the use case. Wrap the return object into a response entity.
         buildResultMessage(postValidatedExecution(request))
+
     } catch (exception: Throwable) {
         // We need to filter out HTTP status exceptions. If we receive one, we must throw it as received.
-        // Otherwise [HttpStatus.INTERNAL_SERVER_ERROR] will be thrown.
         throw if (exception is HttpStatusException) exception
+
+        // Otherwise [HttpStatus.INTERNAL_SERVER_ERROR] will be thrown.
         else raiseException(ExceptionDictionary.SERVICE_UNAVAILABLE)
     }
 

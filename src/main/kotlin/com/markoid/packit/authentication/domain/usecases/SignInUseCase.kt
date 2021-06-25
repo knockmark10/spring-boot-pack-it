@@ -23,7 +23,7 @@ class SignInUseCase(
 
     override fun postValidatedExecution(request: SignInRequest): SignInResult {
         // Search for user or driver. If it's not found, throw an error
-        val user = this.authRepository.getUserByEmail(request?.email!!)
+        val user = this.authRepository.getUserByEmail(request.email!!)
             ?: this.authRepository.getDriverByEmail(request.email!!)
             ?: throw raiseException(ExceptionDictionary.USER_NOT_FOUND)
 
