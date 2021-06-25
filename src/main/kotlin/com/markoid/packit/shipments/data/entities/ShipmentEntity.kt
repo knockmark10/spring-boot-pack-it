@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 
 @Document("shipments")
 data class ShipmentEntity(
+
     var createdAt: String,
 
     var deliveryDirection: DirectionEntity = DirectionEntity(),
@@ -29,4 +30,5 @@ data class ShipmentEntity(
     var totalDistance: Double = 0.0,
 
     var userId: String = ""
+
 )

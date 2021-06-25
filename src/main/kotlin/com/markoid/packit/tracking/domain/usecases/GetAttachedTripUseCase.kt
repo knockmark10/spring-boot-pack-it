@@ -27,7 +27,7 @@ class GetAttachedTripUseCase(
 
         val shipId = trip.attachments.firstOrNull { it.userId == userId }?.shipmentId ?: ""
 
-        return GetAttachedTripResult(trip.id.toHexString(), shipId)
+        return GetAttachedTripResult(trip.id, shipId)
     }
 
 }

@@ -36,7 +36,7 @@ class GetActiveTripByDriveIdUseCase(
 
         // Return proper object
         return TripResult(
-            tripId = trip.id.toHexString(),
+            tripId = trip.id,
             status = trip.status,
             shipments = shipments
         )

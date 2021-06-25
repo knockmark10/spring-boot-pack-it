@@ -63,7 +63,7 @@ class AttachTrackerUseCase(
             // Save it in the system
             this.trackingRepository.saveTrip(trip)
             // Update 'assignedTrip' property on the user to let know that there is a trip assigned to it
-            userEntity.assignedTrip = trip.id.toHexString()
+            userEntity.assignedTrip = trip.id
             // Perform database update
             this.authRepository.saveUser(userEntity)
         }
