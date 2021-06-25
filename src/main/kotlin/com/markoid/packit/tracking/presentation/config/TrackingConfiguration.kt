@@ -48,7 +48,29 @@ class TrackingConfiguration {
     fun providesGetAttachedShipmentUseCase(
         authRepository: AuthRepository,
         trackingRepository: TrackingRepository
-    ): GetAttachedShipmentUseCase =
-        GetAttachedShipmentUseCase(authRepository, trackingRepository)
+    ): GetAttachedShipmentUseCase = GetAttachedShipmentUseCase(authRepository, trackingRepository)
+
+    @Bean
+    fun providesGetAttachedTripUseCase(
+        authRepository: AuthRepository,
+        trackingRepository: TrackingRepository
+    ): GetAttachedTripUseCase = GetAttachedTripUseCase(authRepository, trackingRepository)
+
+    @Bean
+    fun providesGetLastLocationUseCase(trackingRepository: TrackingRepository): GetLastLocationUseCase =
+        GetLastLocationUseCase(trackingRepository)
+
+    @Bean
+    fun providesUpdateShipmentStatusUseCase(
+        shipmentRepository: ShipmentRepository,
+        trackingRepository: TrackingRepository
+    ): UpdateShipmentStatusUseCase = UpdateShipmentStatusUseCase(shipmentRepository, trackingRepository)
+
+    @Bean
+    fun providesUpdateTripStatusUseCase(
+        authRepository: AuthRepository,
+        shipmentRepository: ShipmentRepository,
+        trackingRepository: TrackingRepository
+    ): UpdateTripStatusUseCase = UpdateTripStatusUseCase(authRepository, shipmentRepository, trackingRepository)
 
 }

@@ -41,7 +41,7 @@ class ShipmentRepositoryImpl(
      */
     override fun saveNewShipment(userId: String, shipment: ShipmentEntity): ShipmentEntity {
         // Save shipment in database
-        this.shipmentDataSource.saveShipmentInDatabase(shipment)
+        this.shipmentDataSource.saveOrUpdateShipmentInDatabase(shipment)
         // Cache shipments. Use SET to prevent duplications
         val cachedShipments = mutableSetOf<ShipmentEntity>()
         // Retrieve the cached shipments
@@ -58,18 +58,24 @@ class ShipmentRepositoryImpl(
      * Updates an existing shipment, if there is one.
      *
      * @param userId - Id of the shipment's owner
-     * @param shipment - The shipment to be updated
+     * @param shipmentToUpdate - The shipment to be updated
      * @return - Whether or not the update was performed
      */
-    override fun updateExistingShipment(userId: String, shipment: ShipmentEntity): Boolean {
-        // Check if user has shipments
-        return if (this.shipmentDataSource.doesUserHaveShipments(userId)) {
-            // Update the shipment
-            saveNewShipment(userId, shipment)
-            true
-        } else {
-            false
-        }
+    override fun updateExistingShipment(userId: String, shipmentToUpdate: ShipmentEntity): Boolean {
+        val existingShipment = getShipmentByShipId(shipmentToUpdate.shipId) ?: return false
+        // Update the shipment in database
+        this.shipmentDataSource.saveOrUpdateShipmentInDatabase(shipmentToUpdate.copy(id = existingShipment.id))
+        // Update the shipment in cache. To do that get the shipments from the cache EXCEPT the one we want to update.
+        val cachedShipments = this.shipmentDataSource
+            .getCachedShipmentsByUserId(userId)
+            .filter { it.shipId != shipmentToUpdate.shipId }
+            .toMutableList()
+        // Then proceed to add the updated shipment to the cached list
+        cachedShipments.add(shipmentToUpdate.copy(id = existingShipment.id))
+        // Finally update the cache
+        this.shipmentDataSource.cacheShipments(userId, cachedShipments)
+        // Return true, meaning it was updated successfully
+        return true
     }
 
 }

@@ -10,6 +10,10 @@ class UpdateShipmentUseCase(
     private val repository: ShipmentRepository
 ) : BaseUseCase<BaseResponse, ShipmentEntity>() {
 
+    override fun onValidateRequest(request: ShipmentEntity): ValidationStatus =
+        if (request.userId.isEmpty()) ValidationStatus.Failure(ExceptionDictionary.MISSING_PARAMETERS)
+        else ValidationStatus.Success
+
     override fun postValidatedExecution(request: ShipmentEntity): BaseResponse {
         // Check if shipment was updated
         if (this.repository.updateExistingShipment(request.userId, request)) {

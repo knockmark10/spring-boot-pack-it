@@ -47,9 +47,9 @@ class ShipmentController(
     @PutMapping
     fun updateExistingShipment(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String,
-        @RequestBody request: ShipmentEntity
+        @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String?,
+        @RequestBody request: ShipmentEntity?
     ): ResponseEntity<BaseResponse> = this.updateShipmentUseCase.setLanguage(language)
-        .startCommand(request.copy(userId = userId))
+        .startCommand(request?.copy(userId = userId ?: ""))
 
 }

@@ -2,11 +2,11 @@ package com.markoid.packit.tracking.presentation.controllers
 
 import com.markoid.packit.core.data.BaseResponse
 import com.markoid.packit.core.presentation.utils.ApiConstants
+import com.markoid.packit.tracking.data.entities.HistoryEntity
 import com.markoid.packit.tracking.data.entities.TripEntity
 import com.markoid.packit.tracking.domain.usecases.*
-import com.markoid.packit.tracking.domain.usecases.request.AttachTrackerRequest
-import com.markoid.packit.tracking.domain.usecases.request.BroadcastLocationRequest
-import com.markoid.packit.tracking.domain.usecases.request.CreateNewTripRequest
+import com.markoid.packit.tracking.domain.usecases.request.*
+import com.markoid.packit.tracking.domain.usecases.results.GetAttachedTripResult
 import com.markoid.packit.tracking.domain.usecases.results.TripResult
 import com.markoid.packit.tracking.domain.usecases.results.UpdateTripRequest
 import org.springframework.http.ResponseEntity
@@ -20,6 +20,9 @@ class TrackingController(
     private val createNewTripUseCase: CreateNewTripUseCase,
     private val getActiveTripByDriverIdUseCase: GetActiveTripByDriveIdUseCase,
     private val getAttachedShipmentUseCase: GetAttachedShipmentUseCase,
+    private val getAttachedTripUseCase: GetAttachedTripUseCase,
+    private val getLastLocationUseCase: GetLastLocationUseCase,
+    private val updateShipmentStatusUseCase: UpdateShipmentStatusUseCase,
     private val updateTripStatusUseCase: UpdateTripStatusUseCase
 ) {
 
@@ -34,21 +37,7 @@ class TrackingController(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestHeader(ApiConstants.HEADER_SHIPMENT_ID, required = false) shipId: String? = null,
         @RequestBody body: BroadcastLocationRequest?
-    ): ResponseEntity<BaseResponse> {
-        val request = BroadcastLocationRequest(
-            body?.address,
-            body?.city,
-            body?.date,
-            body?.latitude,
-            body?.longitude,
-            body?.shipmentStatus,
-            body?.state,
-            shipId,
-            body?.tripId,
-            body?.userId
-        )
-        return this.broadcastLocationUseCase.setLanguage(language).startCommand(request)
-    }
+    ): ResponseEntity<BaseResponse> = this.broadcastLocationUseCase.setLanguage(language).startCommand(body?.copy(shipId = shipId))
 
     @PostMapping(ApiConstants.CREATE_TRIP_URL)
     fun createNewTrip(
@@ -70,6 +59,28 @@ class TrackingController(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestParam("userId") userId: String?
     ): ResponseEntity<Map<String, String>> = this.getAttachedShipmentUseCase.setLanguage(language).startCommand(userId)
+
+    @GetMapping(ApiConstants.GET_ATTACHED_TRIP_URL)
+    fun getAttachedTrip(
+        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
+        @RequestParam("userId") userId: String?
+    ): ResponseEntity<GetAttachedTripResult> = this.getAttachedTripUseCase.setLanguage(language).startCommand(userId)
+
+    @GetMapping(ApiConstants.GET_LAST_LOCATION_URL)
+    fun getLastLocation(
+        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
+        @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String?,
+        @RequestParam("tripId") tripId: String?
+    ): ResponseEntity<HistoryEntity> {
+        val request = GetLastLocationRequest(tripId, userId)
+        return this.getLastLocationUseCase.setLanguage(language).startCommand(request)
+    }
+
+    @PutMapping(ApiConstants.UPDATE_SHIPMENT_STATUS_URL)
+    fun updateShipmentStatus(
+        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
+        @RequestBody body: UpdateShipmentStatusRequest
+    ): ResponseEntity<BaseResponse> = this.updateShipmentStatusUseCase.setLanguage(language).startCommand(body)
 
     @PutMapping(ApiConstants.UPDATE_TRIP_STATUS_URL)
     fun updateTripStatus(

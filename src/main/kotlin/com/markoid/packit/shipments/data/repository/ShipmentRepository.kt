@@ -7,5 +7,5 @@ interface ShipmentRepository {
     fun getShipmentByShipId(shipId: String): ShipmentEntity?
     fun getShipmentsByUserId(userId: String): List<ShipmentEntity>
     fun saveNewShipment(userId: String, shipment: ShipmentEntity): ShipmentEntity
-    fun updateExistingShipment(userId: String, shipment: ShipmentEntity): Boolean
+    fun updateExistingShipment(userId: String, shipmentToUpdate: ShipmentEntity): Boolean
 }
