@@ -14,7 +14,6 @@ class CreateNewTripUseCase(
 
     override fun onValidateRequest(request: CreateNewTripRequest): ValidationStatus = when {
         request.driverId.isNullOrEmpty() ||
-                request.userId.isNullOrEmpty() ||
                 request.tripStatus == null -> throw raiseException(ExceptionDictionary.MISSING_PARAMETERS)
         doesDriverExist(request.driverId).not() -> throw raiseException(ExceptionDictionary.DRIVER_NOT_FOUND)
         else -> ValidationStatus.Success

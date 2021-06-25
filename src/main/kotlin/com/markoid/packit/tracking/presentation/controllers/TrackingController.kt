@@ -37,16 +37,14 @@ class TrackingController(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestHeader(ApiConstants.HEADER_SHIPMENT_ID, required = false) shipId: String? = null,
         @RequestBody body: BroadcastLocationRequest?
-    ): ResponseEntity<BaseResponse> = this.broadcastLocationUseCase.setLanguage(language).startCommand(body?.copy(shipId = shipId))
+    ): ResponseEntity<BaseResponse> = this.broadcastLocationUseCase.setLanguage(language)
+        .startCommand(body?.copy(shipId = shipId))
 
     @PostMapping(ApiConstants.CREATE_TRIP_URL)
     fun createNewTrip(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String,
         @RequestBody body: CreateNewTripRequest?
-    ): ResponseEntity<TripEntity> = this.createNewTripUseCase
-        .setLanguage(language)
-        .startCommand(body?.copy(userId = userId))
+    ): ResponseEntity<TripEntity> = this.createNewTripUseCase.setLanguage(language).startCommand(body)
 
     @GetMapping(ApiConstants.GET_ACTIVE_TRIP_BY_DRIVER_ID_URL)
     fun getActiveTripByDriverId(

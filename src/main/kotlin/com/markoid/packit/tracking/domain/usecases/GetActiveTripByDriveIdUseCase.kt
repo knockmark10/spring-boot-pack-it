@@ -23,9 +23,9 @@ class GetActiveTripByDriveIdUseCase(
     }
 
     override fun postValidatedExecution(driverId: String): TripResult {
-        // Get the trip with the driver associated
+        // Get the trip with the driver associated. Return empty json instead
         val trip =
-            trackingRepository.getTripByDriverId(driverId) ?: throw raiseException(ExceptionDictionary.TRIP_NOT_FOUND)
+            trackingRepository.getTripByDriverId(driverId) ?: return TripResult()
 
         // The trip should be active or inactive
         if (trip.status == null || trip.status == TripStatus.Archived)
