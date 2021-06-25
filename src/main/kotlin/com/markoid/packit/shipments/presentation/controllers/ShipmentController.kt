@@ -3,11 +3,9 @@ package com.markoid.packit.shipments.presentation.controllers
 import com.markoid.packit.core.data.BaseResponse
 import com.markoid.packit.core.presentation.utils.ApiConstants
 import com.markoid.packit.shipments.data.entities.ShipmentEntity
-import com.markoid.packit.shipments.domain.usecases.DeleteShipmentUseCase
-import com.markoid.packit.shipments.domain.usecases.GetShipmentsUseCase
-import com.markoid.packit.shipments.domain.usecases.SaveShipmentUseCase
-import com.markoid.packit.shipments.domain.usecases.UpdateShipmentUseCase
+import com.markoid.packit.shipments.domain.usecases.*
 import com.markoid.packit.shipments.domain.usecases.requests.DeleteShipmentRequest
+import com.markoid.packit.shipments.domain.usecases.results.GenerateIdResult
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class ShipmentController(
     private val deleteShipmentUseCase: DeleteShipmentUseCase,
+    private val generateShipmentIdUseCase: GenerateShipmentIdUseCase,
     private val getShipmentsUseCase: GetShipmentsUseCase,
     private val saveShipmentUseCase: SaveShipmentUseCase,
     private val updateShipmentUseCase: UpdateShipmentUseCase
@@ -30,6 +29,11 @@ class ShipmentController(
         @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String?,
     ): ResponseEntity<BaseResponse> = this.deleteShipmentUseCase.setLanguage(language)
         .startCommand(DeleteShipmentRequest(shipId, userId))
+
+    @GetMapping(ApiConstants.GENERATE_SHIPMENT_ID)
+    fun generateShipmentId(
+        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en"
+    ): ResponseEntity<GenerateIdResult> = this.generateShipmentIdUseCase.setLanguage(language).startCommand(Unit)
 
     @GetMapping
     fun getShipmentsByUserId(

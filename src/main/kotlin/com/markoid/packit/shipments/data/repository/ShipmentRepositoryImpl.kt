@@ -68,14 +68,14 @@ class ShipmentRepositoryImpl(
     override fun updateExistingShipment(userId: String, shipmentToUpdate: ShipmentEntity): Boolean {
         val existingShipment = getShipmentByShipId(shipmentToUpdate.shipId) ?: return false
         // Update the shipment in database
-        this.shipmentDataSource.saveOrUpdateShipmentInDatabase(shipmentToUpdate.copy(id = existingShipment.id))
+        this.shipmentDataSource.saveOrUpdateShipmentInDatabase(shipmentToUpdate.copy(shipId = existingShipment.shipId))
         // Update the shipment in cache. To do that get the shipments from the cache EXCEPT the one we want to update.
         val cachedShipments = this.shipmentDataSource
             .getCachedShipmentsByUserId(userId)
             .filter { it.shipId != shipmentToUpdate.shipId }
             .toMutableList()
         // Then proceed to add the updated shipment to the cached list
-        cachedShipments.add(shipmentToUpdate.copy(id = existingShipment.id))
+        cachedShipments.add(shipmentToUpdate.copy(shipId = existingShipment.shipId))
         // Finally update the cache
         this.shipmentDataSource.cacheShipments(userId, cachedShipments)
         // Return true, meaning it was updated successfully
