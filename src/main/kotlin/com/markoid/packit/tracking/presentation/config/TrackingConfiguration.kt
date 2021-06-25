@@ -57,6 +57,12 @@ class TrackingConfiguration {
     ): GetAttachedTripUseCase = GetAttachedTripUseCase(authRepository, trackingRepository)
 
     @Bean
+    fun providesGetHistoryByUserIdUseCase(
+        authRepository: AuthRepository,
+        trackingRepository: TrackingRepository
+    ): GetHistoryByUserIdUseCase = GetHistoryByUserIdUseCase(authRepository, trackingRepository)
+
+    @Bean
     fun providesGetLastLocationUseCase(trackingRepository: TrackingRepository): GetLastLocationUseCase =
         GetLastLocationUseCase(trackingRepository)
 

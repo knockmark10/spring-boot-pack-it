@@ -7,6 +7,7 @@ import com.markoid.packit.shipments.domain.usecases.DeleteShipmentUseCase
 import com.markoid.packit.shipments.domain.usecases.GetShipmentsUseCase
 import com.markoid.packit.shipments.domain.usecases.SaveShipmentUseCase
 import com.markoid.packit.shipments.domain.usecases.UpdateShipmentUseCase
+import com.markoid.packit.shipments.domain.usecases.requests.DeleteShipmentRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -25,10 +26,10 @@ class ShipmentController(
     @DeleteMapping
     fun deleteShipmentByUserId(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String,
-        @RequestBody request: ShipmentEntity
+        @RequestHeader(ApiConstants.HEADER_SHIPMENT_ID, required = false) shipId: String?,
+        @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String?,
     ): ResponseEntity<BaseResponse> = this.deleteShipmentUseCase.setLanguage(language)
-        .startCommand(request.copy(userId = userId))
+        .startCommand(DeleteShipmentRequest(shipId, userId))
 
     @GetMapping
     fun getShipmentsByUserId(

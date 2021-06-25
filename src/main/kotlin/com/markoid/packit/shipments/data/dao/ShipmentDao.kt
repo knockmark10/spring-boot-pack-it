@@ -8,12 +8,12 @@ import org.springframework.data.mongodb.repository.Query
 interface ShipmentDao : MongoRepository<ShipmentEntity, String> {
 
     @Query("{ 'userId': ?0 }")
-    fun findShipmentByUserId(userId: String): List<ShipmentEntity>?
+    fun findShipmentsByUserId(userId: String): List<ShipmentEntity>?
 
     @Query("{ 'shipId': ?0 }")
     fun findShipmentByShipId(shipId: String): ShipmentEntity?
 
-    @DeleteQuery("{ '_id': ?0 }")
-    fun deleteShipmentById(shipId: String): ShipmentEntity?
+    @DeleteQuery("{ 'shipId': ?0 }")
+    fun deleteShipmentByShipId(shipId: String): ShipmentEntity?
 
 }

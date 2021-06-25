@@ -44,12 +44,14 @@ abstract class BaseUseCase<Result, Params> {
      * Call this method when you want to start the use case execution. This will make sure to validate the [request]
      * and raise proper exceptions when some validations fail the process.
      */
-    open fun startCommand(request: Params?): ResponseEntity<Result> = try {
+    internal fun startCommand(request: Params?): ResponseEntity<Result> = try {
         // Request nullability will be checked
         if (request == null) throw raiseException(ExceptionDictionary.MISSING_PARAMETERS)
 
-        // Check the validation result. Pass the not-null request as an argument.
+        // Get the validation result. It will be 'Success' by default
         val validationStatus = onValidateRequest(request)
+
+        // If it is 'Failure', throw the exception wrapped
         if (validationStatus is ValidationStatus.Failure) throw raiseException(validationStatus.exception)
 
         // Validation succeeded. We can proceed to execute the use case. Wrap the return object into a response entity.
@@ -65,8 +67,8 @@ abstract class BaseUseCase<Result, Params> {
      * Set the [language] from the supported [AppLanguage] available. This will make sure that all the messages returned
      * by this use case will be properly translated.
      */
-    open fun setLanguage(language: String): BaseUseCase<Result, Params> {
-        this.language = AppLanguage.forValue(language)
+    internal fun setLanguage(language: String?): BaseUseCase<Result, Params> {
+        this.language = AppLanguage.forValue(language ?: "en")
         return this
     }
 

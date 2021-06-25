@@ -7,9 +7,13 @@ class ShipmentRepositoryImpl(
     private val shipmentDataSource: ShipmentDataSourceImpl
 ) : ShipmentRepository {
 
-    override fun deleteShipmentById(shipId: String): Boolean {
-        val shipmentDeleted = this.shipmentDataSource.deleteShipmentById(shipId)
-        return shipmentDeleted != null
+    override fun deleteShipmentByUserId(shipId: String, userId: String): Boolean {
+        // Delete the shipment from the database
+        this.shipmentDataSource.deleteShipmentByIdFromDatabase(shipId) ?: return false
+        // Now remove it from cache
+        this.shipmentDataSource.deleteCachedShipment(userId, shipId)
+        // At this point both removals were performed successfully. Return true
+        return true
     }
 
     override fun getShipmentByShipId(shipId: String): ShipmentEntity? {

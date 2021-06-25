@@ -14,6 +14,7 @@ object ApiConstants {
     // PATHS
     private const val BASE_PATH = "/api/v2"
     const val AUTH_PATH = "$BASE_PATH/auth"
+    const val HISTORY_PATH = "$BASE_PATH/history"
     const val SHIPMENT_PATH = "$BASE_PATH/shipments"
     const val TRACKING_PATH = "$BASE_PATH/tracking"
 

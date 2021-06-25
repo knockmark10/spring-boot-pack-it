@@ -8,12 +8,26 @@ import com.markoid.packit.shipments.data.entities.ShipmentEntity
  */
 class ShipmentCacheImpl : BaseCacheImpl<List<ShipmentEntity>, String>() {
 
-    override fun deleteById(id: String): List<ShipmentEntity>? {
-        return this.cache.remove(id)
+    override fun deleteById(id: String): List<ShipmentEntity> {
+        return this.cache.remove(id) ?: emptyList()
     }
 
-    override fun getById(id: String): List<ShipmentEntity>? {
-        return this.cache[id]
+    fun deleteShipment(userId: String, shipId: String) {
+        // Filter out the shipment desired from the cached shipments
+        val shipments = this.cache[userId]?.filter { it.shipId != shipId } ?: emptyList()
+
+        // If the filtered list is empty, it means the user does not have any shipment left. Just remove it.
+        if (shipments.isEmpty()) {
+            deleteById(userId)
+            return
+        }
+
+        // Finally update the shipment list with the filtered one
+        this.cache[userId] = shipments
+    }
+
+    override fun getById(id: String): List<ShipmentEntity> {
+        return this.cache[id] ?: emptyList()
     }
 
     override fun saveOrUpdate(id: String, entity: List<ShipmentEntity>): List<ShipmentEntity> {
