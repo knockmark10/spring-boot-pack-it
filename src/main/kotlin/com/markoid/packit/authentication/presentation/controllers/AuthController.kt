@@ -21,7 +21,7 @@ class AuthController(
     @PostMapping(ApiConstants.SIGN_IN_URL)
     fun signIn(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @RequestBody body: SignInRequest
+        @RequestBody body: SignInRequest?
     ): ResponseEntity<SignInResult> = this.signInUseCase.setLanguage(language).startCommand(body)
 
     @PostMapping(ApiConstants.SIGN_UP_URL)
