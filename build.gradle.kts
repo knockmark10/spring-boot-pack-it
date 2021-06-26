@@ -16,16 +16,31 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    // Spring Boot Core
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+
+    // Joda Time library
     implementation("joda-time:joda-time:2.10")
+
+    // Json Web Token
     implementation("io.jsonwebtoken:jjwt-impl:0.11.1")
     implementation("io.jsonwebtoken:jjwt-api:0.11.1")
     implementation("io.jsonwebtoken:jjwt-jackson:0.11.1")
+
+    // Serializers
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+    // Documentation
+    implementation("io.springfox:springfox-swagger2:2.6.1")
+
+    // Kotlin related
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    // Testing Frameworks
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

@@ -3,20 +3,19 @@ package com.markoid.packit.authentication.domain.usecases
 import com.markoid.packit.authentication.data.entities.DriverEntity
 import com.markoid.packit.authentication.data.entities.UserEntity
 import com.markoid.packit.authentication.data.repository.AuthRepository
-import com.markoid.packit.authentication.domain.requests.SignUpRequest
+import com.markoid.packit.authentication.domain.requests.SignUpEntityDto
 import com.markoid.packit.authentication.domain.requests.UserType
 import com.markoid.packit.core.data.BaseResponse
 import com.markoid.packit.core.domain.usecases.BaseUseCase
 import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
-import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 class SignUpUseCase(
     private val authRepository: AuthRepository,
     private val bCryptPasswordEncoder: BCryptPasswordEncoder
-) : BaseUseCase<BaseResponse, SignUpRequest>() {
+) : BaseUseCase<BaseResponse, SignUpEntityDto>() {
 
-    override fun postValidatedExecution(request: SignUpRequest): BaseResponse {
+    override fun postValidatedExecution(request: SignUpEntityDto): BaseResponse {
         // Look for an user or a driver.
         val existingUser =
             this.authRepository.getUserByEmail(request.email!!) ?: this.authRepository.getDriverByEmail(request.email)
@@ -53,7 +52,7 @@ class SignUpUseCase(
         }
     }
 
-    override fun onValidateRequest(request: SignUpRequest): ValidationStatus = when {
+    override fun onValidateRequest(request: SignUpEntityDto): ValidationStatus = when {
         request.name.isNullOrEmpty() ||
                 request.lastName.isNullOrEmpty() ||
                 request.email.isNullOrEmpty() ||

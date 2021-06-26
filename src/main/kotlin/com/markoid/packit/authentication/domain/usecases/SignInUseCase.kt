@@ -2,7 +2,7 @@ package com.markoid.packit.authentication.domain.usecases
 
 import com.markoid.packit.authentication.data.entities.UserEntity
 import com.markoid.packit.authentication.data.repository.AuthRepository
-import com.markoid.packit.authentication.domain.requests.SignInRequest
+import com.markoid.packit.authentication.domain.requests.SignInEntityDto
 import com.markoid.packit.authentication.domain.requests.UserType
 import com.markoid.packit.authentication.domain.results.SignInResult
 import com.markoid.packit.core.domain.usecases.BaseUseCase
@@ -19,9 +19,9 @@ import java.util.*
 class SignInUseCase(
     private val authRepository: AuthRepository,
     private val bCryptPasswordEncoder: BCryptPasswordEncoder
-) : BaseUseCase<SignInResult, SignInRequest>() {
+) : BaseUseCase<SignInResult, SignInEntityDto>() {
 
-    override fun postValidatedExecution(request: SignInRequest): SignInResult {
+    override fun postValidatedExecution(request: SignInEntityDto): SignInResult {
         // Search for user or driver. If it's not found, throw an error
         val user = this.authRepository.getUserByEmail(request.email!!)
             ?: this.authRepository.getDriverByEmail(request.email!!)
@@ -41,7 +41,7 @@ class SignInUseCase(
         )
     }
 
-    override fun onValidateRequest(request: SignInRequest): ValidationStatus = when {
+    override fun onValidateRequest(request: SignInEntityDto): ValidationStatus = when {
         request.email.isNullOrEmpty() || request.password.isNullOrEmpty() ->
             ValidationStatus.Failure(ExceptionDictionary.MISSING_PARAMETERS)
         else -> ValidationStatus.Success
