@@ -36,7 +36,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(HttpStatusException::class)
-    fun handleExceptions(exception: Throwable): ResponseEntity<Any> = when (exception) {
+    fun handleHttpStatusException(exception: Throwable): ResponseEntity<Any> = when (exception) {
         is HttpStatusException -> {
             ResponseEntity.status(exception.status)
                 .body(BaseResponse(ApiState.Error, exception.reason ?: exception.message))

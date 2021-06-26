@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.server.ResponseStatusException
 
+@Deprecated("This use case performs HTTP routing, when it shouldn't. AbstractUseCase will be used from now on.")
 abstract class BaseUseCase<Result, Params> {
 
     @Autowired
