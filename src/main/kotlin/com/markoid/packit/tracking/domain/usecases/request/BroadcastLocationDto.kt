@@ -9,52 +9,52 @@ import javax.validation.constraints.NotEmpty
 data class BroadcastLocationDto(
 
     @JsonProperty("address", required = true)
-    @NotBlank(message = "Parameter is required.")
-    @NotEmpty(message = "Parameter should not be empty.")
+    @get:NotBlank(message = "Parameter is required.")
+    @get:NotEmpty(message = "Parameter should not be empty.")
     val address: String = "",
 
     @JsonProperty("city", required = true)
-    @NotBlank(message = "Parameter is required.")
-    @NotEmpty(message = "Parameter should not be empty.")
+    @get:NotBlank(message = "Parameter is required.")
+    @get:NotEmpty(message = "Parameter should not be empty.")
     val city: String,
 
     @JsonProperty("date", required = true)
-    @NotBlank(message = "Parameter is required.")
-    @NotEmpty(message = "Parameter should not be empty.")
+    @get:NotBlank(message = "Parameter is required.")
+    @get:NotEmpty(message = "Parameter should not be empty.")
     val date: String,
 
     @JsonProperty("latitude", required = true)
-    @NotBlank(message = "Parameter is required.")
-    @NotEmpty(message = "Parameter should not be empty.")
+    @get:NotBlank(message = "Parameter is required.")
+    @get:NotEmpty(message = "Parameter should not be empty.")
     val latitude: Double,
 
     @JsonProperty("longitude", required = true)
-    @NotBlank(message = "Parameter is required.")
-    @NotEmpty(message = "Parameter should not be empty.")
+    @get:NotBlank(message = "Parameter is required.")
+    @get:NotEmpty(message = "Parameter should not be empty.")
     val longitude: Double,
 
     @JsonProperty("shipmentStatus", required = true)
-    @ValidShipmentStatus(message = "Parameter is not a valid entry from ShipmentStatus.")
+    @get:ValidShipmentStatus(message = "Parameter is not a valid entry from ShipmentStatus.")
     val shipmentStatus: ShipmentStatus,
 
     @JsonProperty("state", required = true)
-    @NotBlank(message = "Parameter is required.")
-    @NotEmpty(message = "Parameter should not be empty.")
+    @get:NotBlank(message = "Parameter is required.")
+    @get:NotEmpty(message = "Parameter should not be empty.")
     val state: String,
 
     @JsonProperty("shipId", required = true)
-    @NotBlank(message = "Parameter is required.")
-    @NotEmpty(message = "Parameter should not be empty.")
+    @get:NotBlank(message = "Parameter is required.")
+    @get:NotEmpty(message = "Parameter should not be empty.")
     val shipId: String,
 
     @JsonProperty("tripId", required = true)
-    @NotBlank(message = "Parameter is required.")
-    @NotEmpty(message = "Parameter should not be empty.")
+    @get:NotBlank(message = "Parameter is required.")
+    @get:NotEmpty(message = "Parameter should not be empty.")
     val tripId: String,
 
     @JsonProperty("userId", required = true)
-    @NotBlank(message = "Parameter is required.")
-    @NotEmpty(message = "Parameter should not be empty.")
+    @get:NotBlank(message = "Parameter is required.")
+    @get:NotEmpty(message = "Parameter should not be empty.")
     val userId: String
 
 )

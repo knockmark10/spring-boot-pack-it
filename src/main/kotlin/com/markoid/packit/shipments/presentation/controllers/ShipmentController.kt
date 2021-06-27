@@ -4,7 +4,7 @@ import com.markoid.packit.core.data.ApiResult
 import com.markoid.packit.core.presentation.utils.ApiConstants
 import com.markoid.packit.shipments.data.entities.ShipmentEntity
 import com.markoid.packit.shipments.domain.usecases.*
-import com.markoid.packit.shipments.domain.usecases.requests.DeleteShipmentRequest
+import com.markoid.packit.shipments.domain.usecases.requests.DeleteShipmentDto
 import com.markoid.packit.shipments.domain.usecases.requests.ShipmentEntityDto
 import com.markoid.packit.shipments.domain.usecases.results.GenerateIdResult
 import io.swagger.annotations.ApiOperation
@@ -46,12 +46,10 @@ class ShipmentController(
     @DeleteMapping
     fun deleteShipmentByUserId(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @RequestHeader(ApiConstants.HEADER_SHIPMENT_ID, required = false) shipId: String?,
-        @RequestHeader(ApiConstants.PARAM_USER_ID, required = false) userId: String?,
+        @RequestBody @Valid body: DeleteShipmentDto?
     ): ResponseEntity<ApiResult> {
-        this.logger.info(DELETE_SHIPMENT_LOG, shipId, userId)
-        val result =
-            this.deleteShipmentUseCase.setLanguage(language).startCommand(DeleteShipmentRequest(shipId, userId))
+        val result = this.deleteShipmentUseCase.setLanguage(language).startCommand(body)
+        this.logger.info(DELETE_SHIPMENT_LOG, body?.shipId, body?.userId)
         return ResponseEntity.ok(result)
     }
 
