@@ -1,9 +1,9 @@
 package com.markoid.packit.core.presentation.filters
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.markoid.packit.core.data.ApiResult
 import com.markoid.packit.core.data.ApiState
 import com.markoid.packit.core.data.AppLanguage
-import com.markoid.packit.core.data.BaseResponse
 import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
 import com.markoid.packit.core.presentation.handlers.LocaleResolver
 import org.springframework.security.authentication.AuthenticationManager
@@ -24,7 +24,7 @@ abstract class AbstractAuthenticationFilter(
         response.status = dictionary.statusCode.value()
         response.contentType = "application/json"
         // A class used for errors
-        val apiError = BaseResponse(ApiState.Error, localeResolver.getString(dictionary, language))
+        val apiError = ApiResult(message = localeResolver.getString(dictionary, language), status = ApiState.Error)
         try {
             val json: String = ObjectMapper().writeValueAsString(apiError)
             response.writer.write(json)

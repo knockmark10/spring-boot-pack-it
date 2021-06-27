@@ -5,7 +5,7 @@ import com.markoid.packit.authentication.data.entities.UserEntity
 import com.markoid.packit.authentication.data.repository.AuthRepository
 import com.markoid.packit.authentication.domain.requests.SignUpEntityDto
 import com.markoid.packit.authentication.domain.requests.UserType
-import com.markoid.packit.core.data.BaseResponse
+import com.markoid.packit.core.data.ApiResult
 import com.markoid.packit.core.domain.usecases.AbstractUseCase
 import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -13,9 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 class SignUpUseCase(
     private val authRepository: AuthRepository,
     private val bCryptPasswordEncoder: BCryptPasswordEncoder
-) : AbstractUseCase<BaseResponse, SignUpEntityDto>() {
+) : AbstractUseCase<ApiResult, SignUpEntityDto>() {
 
-    override fun onExecuteTask(params: SignUpEntityDto): BaseResponse {
+    override fun onExecuteTask(params: SignUpEntityDto): ApiResult {
         // Look for an user or a driver.
         val existingUser =
             this.authRepository.getUserByEmail(params.email) ?: this.authRepository.getDriverByEmail(params.email)

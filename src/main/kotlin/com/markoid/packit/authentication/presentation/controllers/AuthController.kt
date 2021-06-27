@@ -5,7 +5,7 @@ import com.markoid.packit.authentication.domain.requests.SignUpEntityDto
 import com.markoid.packit.authentication.domain.results.SignInResult
 import com.markoid.packit.authentication.domain.usecases.SignInUseCase
 import com.markoid.packit.authentication.domain.usecases.SignUpUseCase
-import com.markoid.packit.core.data.BaseResponse
+import com.markoid.packit.core.data.ApiResult
 import com.markoid.packit.core.presentation.utils.ApiConstants
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
@@ -46,7 +46,7 @@ class AuthController(
     fun signUp(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @Valid @RequestBody(required = false) body: SignUpEntityDto?
-    ): ResponseEntity<BaseResponse> {
+    ): ResponseEntity<ApiResult> {
         val result = this.signUpUseCase.setLanguage(language).startCommand(body)
         this.logger.info(SIGN_UP_LOG, body)
         return ResponseEntity.ok(result)
