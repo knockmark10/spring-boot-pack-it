@@ -93,11 +93,10 @@ class ShipmentController(
     @PostMapping
     fun saveNewShipment(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @RequestHeader(ApiConstants.PARAM_USER_ID, required = false) userId: String,
         @RequestBody(required = false) @Valid request: ShipmentEntityDto?
     ): ResponseEntity<Any> {
-        val shipment = this.saveShipmentUseCase.setLanguage(language).startCommand(request?.copy(userId = userId))
-        this.logger.info(SAVE_NEW_SHIPMENT_LOG, userId, request)
+        val shipment = this.saveShipmentUseCase.setLanguage(language).startCommand(request)
+        this.logger.info(SAVE_NEW_SHIPMENT_LOG, request?.userId, request)
         return ResponseEntity.ok(shipment)
     }
 
@@ -110,11 +109,10 @@ class ShipmentController(
     @PutMapping
     fun updateExistingShipment(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @RequestHeader(ApiConstants.PARAM_USER_ID, required = false) userId: String?,
         @RequestBody(required = false) @Valid request: ShipmentEntityDto?
     ): ResponseEntity<ApiResult> {
-        val result = this.updateShipmentUseCase.setLanguage(language).startCommand(request?.copy(userId = userId ?: ""))
-        this.logger.info(UPDATE_SHIPMENT_LOG, userId, request)
+        val result = this.updateShipmentUseCase.setLanguage(language).startCommand(request)
+        this.logger.info(UPDATE_SHIPMENT_LOG, request?.userId, request)
         return ResponseEntity.ok(result)
     }
 

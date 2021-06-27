@@ -55,8 +55,9 @@ data class ShipmentEntityDto(
     @get:PositiveOrZero(message = "Parameter must be positive or zero.")
     val totalDistance: Double,
 
-    // This property will be validated in use case
     @JsonProperty("userId")
+    @get:NotBlank(message = "Parameter is required.")
+    @get:NotEmpty(message = "Parameter should not be empty.")
     val userId: String = ""
 
 )
