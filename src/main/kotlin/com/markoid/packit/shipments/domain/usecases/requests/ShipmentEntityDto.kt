@@ -6,7 +6,6 @@ import com.markoid.packit.shipments.data.entities.PackageEntity
 import com.markoid.packit.shipments.data.entities.ShipmentEntity
 import com.markoid.packit.shipments.data.entities.ShipmentStatus
 import com.markoid.packit.shipments.presentation.annotations.ValidDirection
-import com.markoid.packit.shipments.presentation.annotations.ValidShipmentStatus
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.PositiveOrZero
@@ -48,8 +47,7 @@ data class ShipmentEntityDto(
     val shipId: String,
 
     @JsonProperty("status", required = true)
-    @get:ValidShipmentStatus(message = "Parameter provided is not a valid type from ShipmentStatus")
-    val status: String,
+    val status: ShipmentStatus,
 
     @JsonProperty("totalDistance", required = true)
     @get:PositiveOrZero(message = "Parameter must be positive or zero.")
@@ -74,7 +72,7 @@ fun ShipmentEntityDto.mapToEntity(): ShipmentEntity = ShipmentEntity(
     pickUpDirection = pickUpDirection,
     receivedAt = receivedAt,
     shipId = shipId,
-    status = ShipmentStatus.valueOf(status),
+    status = status,
     totalDistance = totalDistance,
     userId = userId
 )

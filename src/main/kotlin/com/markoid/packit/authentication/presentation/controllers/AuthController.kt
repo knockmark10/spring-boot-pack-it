@@ -6,6 +6,7 @@ import com.markoid.packit.authentication.domain.results.SignInResult
 import com.markoid.packit.authentication.domain.usecases.SignInUseCase
 import com.markoid.packit.authentication.domain.usecases.SignUpUseCase
 import com.markoid.packit.core.data.ApiResult
+import com.markoid.packit.core.data.ApiState
 import com.markoid.packit.core.presentation.utils.ApiConstants
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
@@ -33,7 +34,7 @@ class AuthController(
     @PostMapping(ApiConstants.SIGN_IN_URL)
     fun signIn(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @Valid @RequestBody(required = false) body: SignInEntityDto?
+        @RequestBody(required = false) @Valid body: SignInEntityDto?
     ): ResponseEntity<SignInResult> {
         val result = this.signInUseCase.setLanguage(language).startCommand(body)
         this.logger.info(SIGN_IN_LOG, result.name, result.lastName)
@@ -45,11 +46,11 @@ class AuthController(
     @PostMapping(ApiConstants.SIGN_UP_URL)
     fun signUp(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @Valid @RequestBody(required = false) body: SignUpEntityDto?
+        @RequestBody @Valid body: SignUpEntityDto?
     ): ResponseEntity<ApiResult> {
-        val result = this.signUpUseCase.setLanguage(language).startCommand(body)
-        this.logger.info(SIGN_UP_LOG, body)
-        return ResponseEntity.ok(result)
+        /*val result = this.signUpUseCase.setLanguage(language).startCommand(body)
+        this.logger.info(SIGN_UP_LOG, body)*/
+        return ResponseEntity.ok(ApiResult("", ApiState.Success))
     }
 
 }

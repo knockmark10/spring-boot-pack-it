@@ -10,7 +10,7 @@ data class TripEntity(
     var attachments: MutableList<AttachmentsEntity> = mutableListOf(),
     @Id val id: String = " ",
     @Field("driverId")
-    val driverId: String? = "",
+    val driverId: String = "",
     @Field("status")
-    val status: TripStatus?
+    val status: TripStatus
 ) 

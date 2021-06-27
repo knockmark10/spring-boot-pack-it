@@ -1,20 +1,22 @@
 package com.markoid.packit.core.presentation.handlers
 
+import com.markoid.packit.core.data.ApiResult
 import com.markoid.packit.core.data.ApiState
 import com.markoid.packit.core.data.AppLanguage
-import com.markoid.packit.core.data.ApiResult
 import com.markoid.packit.core.domain.exceptions.HttpStatusException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
+import javax.validation.ConstraintViolationException
 
 @ControllerAdvice
 class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
@@ -35,8 +37,26 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
     ): ResponseEntity<Any> {
         val validationErrors = ex.bindingResult.fieldErrors.map { "${it.field}: ${it.defaultMessage}" }
         val path = request.getDescription(false)
-        this.logger.error("Validation error was thrown: ${validationErrors.joinToString()} at path $path", ex)
+        this.logger.error("Validation error was thrown: ${validationErrors.joinToString()} at $path", ex)
         return getExceptionResponseEntity(ex, status, request, validationErrors)
+    }
+
+    override fun handleHttpMessageNotReadable(
+        ex: HttpMessageNotReadableException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
+    ): ResponseEntity<Any> {
+        return getExceptionResponseEntity(ex, status, request, listOf(ex.localizedMessage))
+    }
+
+    @ExceptionHandler(ConstraintViolationException::class)
+    fun handleConstraintViolationException(
+        exception: ConstraintViolationException,
+        request: WebRequest
+    ): ResponseEntity<Any> {
+        val validationErrors = exception.constraintViolations.map { "${it.propertyPath}: ${it.message}" }
+        return getExceptionResponseEntity(exception, HttpStatus.BAD_REQUEST, request, validationErrors)
     }
 
     /**
@@ -91,7 +111,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         status: HttpStatus,
         request: WebRequest,
         errors: List<String> = emptyList(),
-        message: String? = ""
+        message: String? = null
     ): ResponseEntity<Any> {
         val path = request.getDescription(false)
         val errorBody = ApiResult(

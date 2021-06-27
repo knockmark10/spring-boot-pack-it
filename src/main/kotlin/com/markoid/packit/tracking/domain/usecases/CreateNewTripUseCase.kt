@@ -1,27 +1,26 @@
 package com.markoid.packit.tracking.domain.usecases
 
 import com.markoid.packit.authentication.data.repository.AuthRepository
-import com.markoid.packit.core.domain.usecases.BaseUseCase
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
+import com.markoid.packit.core.domain.usecases.AbstractUseCase
+import com.markoid.packit.core.domain.usecases.AbstractUseCase.ValidationStatus.Failure
+import com.markoid.packit.core.domain.usecases.AbstractUseCase.ValidationStatus.Success
+import com.markoid.packit.core.presentation.handlers.ExceptionDictionary.DRIVER_NOT_FOUND
 import com.markoid.packit.tracking.data.entities.TripEntity
 import com.markoid.packit.tracking.data.repository.TrackingRepository
-import com.markoid.packit.tracking.domain.usecases.request.CreateNewTripRequest
+import com.markoid.packit.tracking.domain.usecases.request.CreateNewTripDto
 
 class CreateNewTripUseCase(
     private val authRepository: AuthRepository,
     private val trackingRepository: TrackingRepository
-) : BaseUseCase<TripEntity, CreateNewTripRequest>() {
+) : AbstractUseCase<TripEntity, CreateNewTripDto>() {
 
-    override fun onValidateRequest(request: CreateNewTripRequest): ValidationStatus = when {
-        request.driverId.isNullOrEmpty() ||
-                request.tripStatus == null -> throw raiseException(ExceptionDictionary.MISSING_PARAMETERS)
-        doesDriverExist(request.driverId).not() -> throw raiseException(ExceptionDictionary.DRIVER_NOT_FOUND)
-        else -> ValidationStatus.Success
-    }
+    override fun onHandleValidations(params: CreateNewTripDto): ValidationStatus =
+        if (doesDriverExist(params.driverId).not()) Failure(DRIVER_NOT_FOUND)
+        else Success
 
-    override fun postValidatedExecution(request: CreateNewTripRequest): TripEntity {
+    override fun onExecuteTask(params: CreateNewTripDto): TripEntity {
         // At this point, the request and its parameters are fully validated
-        val tripEntity = TripEntity(driverId = request.driverId, status = request.tripStatus)
+        val tripEntity = TripEntity(driverId = params.driverId, status = params.tripStatus)
         // Save trip in system
         this.trackingRepository.saveTrip(tripEntity)
         // Create response entity and return it

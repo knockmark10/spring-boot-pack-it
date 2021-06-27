@@ -1,39 +1,33 @@
 package com.markoid.packit.tracking.domain.usecases
 
 import com.markoid.packit.authentication.data.repository.AuthRepository
-import com.markoid.packit.core.data.BaseResponse
-import com.markoid.packit.core.domain.usecases.BaseUseCase
+import com.markoid.packit.core.data.ApiResult
+import com.markoid.packit.core.domain.usecases.AbstractUseCase
 import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
 import com.markoid.packit.shipments.data.repository.ShipmentRepository
 import com.markoid.packit.tracking.data.entities.TripStatus
 import com.markoid.packit.tracking.data.repository.TrackingRepository
-import com.markoid.packit.tracking.domain.usecases.results.UpdateTripRequest
+import com.markoid.packit.tracking.domain.usecases.results.UpdateTripDto
 
 class UpdateTripStatusUseCase(
     private val authRepository: AuthRepository,
     private val shipmentRepository: ShipmentRepository,
     private val trackingRepository: TrackingRepository,
-) : BaseUseCase<BaseResponse, UpdateTripRequest>() {
+) : AbstractUseCase<ApiResult, UpdateTripDto>() {
 
-    override fun onValidateRequest(request: UpdateTripRequest): ValidationStatus = when {
-        request.tripId.isNullOrEmpty() ||
-                request.status == null ||
-                // Archived status required end time to be valid
-                (request.status == TripStatus.Archived && request.endTime.isNullOrEmpty()) ->
-            ValidationStatus.Failure(ExceptionDictionary.MISSING_PARAMETERS)
-        else -> ValidationStatus.Success
-    }
-
-    override fun postValidatedExecution(request: UpdateTripRequest): BaseResponse {
+    override fun onExecuteTask(params: UpdateTripDto): ApiResult {
         // Get trip by id
-        val trip = this.trackingRepository.getTripById(request.tripId!!)
+        val trip = this.trackingRepository.getTripById(params.tripId)
             ?: throw raiseException(ExceptionDictionary.TRIP_NOT_FOUND)
 
         // Update trip with incoming status
-        this.trackingRepository.saveTrip(trip.copy(status = request.status))
+        this.trackingRepository.saveTrip(trip.copy(status = params.status))
 
         // Update users and shipments if the trip status is set to 'Archived'
-        if (request.status == TripStatus.Archived) {
+        if (params.status == TripStatus.Archived) {
+            // End time parameter should not be null when status is 'Archived'
+            if (params.endTime == null) throw raiseException(ExceptionDictionary.MISSING_PARAMETERS)
+            // Loop through attachments
             for (it in trip.attachments) {
                 // Remove assigned trips to the user
                 val user = this.authRepository.getUserById(it.userId) ?: continue
@@ -41,11 +35,11 @@ class UpdateTripStatusUseCase(
                 // Add delivery date to every archived shipment, with the provided end time
                 val shipment = this.shipmentRepository.getShipmentByShipId(it.shipmentId)
                     ?: throw raiseException(ExceptionDictionary.SHIPMENT_NOT_FOUND)
-                this.shipmentRepository.updateExistingShipment(it.userId, shipment.copy(receivedAt = request.endTime))
+                this.shipmentRepository.updateExistingShipment(it.userId, shipment.copy(receivedAt = params.endTime))
             }
         }
 
-        return buildOkMessage(ExceptionDictionary.TRIP_UPDATED_SUCCESSFULLY)
+        return buildSuccessfulMessage(ExceptionDictionary.TRIP_UPDATED_SUCCESSFULLY)
     }
 
 }

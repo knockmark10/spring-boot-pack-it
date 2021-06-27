@@ -1,8 +1,8 @@
 package com.markoid.packit.core.domain.usecases
 
+import com.markoid.packit.core.data.ApiResult
 import com.markoid.packit.core.data.ApiState
 import com.markoid.packit.core.data.AppLanguage
-import com.markoid.packit.core.data.BaseResponse
 import com.markoid.packit.core.domain.exceptions.HttpStatusException
 import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
 import com.markoid.packit.core.presentation.handlers.LocaleResolver
@@ -75,8 +75,8 @@ abstract class BaseUseCase<Result, Params> {
         return this
     }
 
-    protected fun buildOkMessage(dictionary: ExceptionDictionary): BaseResponse =
-        BaseResponse(ApiState.Success, localeResolver.getString(dictionary, language))
+    protected fun buildOkMessage(dictionary: ExceptionDictionary): ApiResult =
+        ApiResult(localeResolver.getString(dictionary, language), ApiState.Success)
 
     /**
      * Creates a [HttpStatusException] with a translated message for the given [ExceptionDictionary].
