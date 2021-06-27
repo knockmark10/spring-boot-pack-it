@@ -9,7 +9,8 @@ object ApiConstants {
     const val HEADER_TOKEN = "x-access-token"
     const val HEADER_LANGUAGE = "language"
     const val HEADER_SHIPMENT_ID = "shipid"
-    const val HEADER_USER_ID = "userid"
+    const val PARAM_USER_ID = "userid"
+    const val PARAM_TRIP_ID = "trip"
 
     // PATHS
     private const val BASE_PATH = "/api/v2"

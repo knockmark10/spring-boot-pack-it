@@ -47,7 +47,7 @@ class ShipmentController(
     fun deleteShipmentByUserId(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestHeader(ApiConstants.HEADER_SHIPMENT_ID, required = false) shipId: String?,
-        @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String?,
+        @RequestHeader(ApiConstants.PARAM_USER_ID, required = false) userId: String?,
     ): ResponseEntity<ApiResult> {
         this.logger.info(DELETE_SHIPMENT_LOG, shipId, userId)
         val result =
@@ -79,7 +79,7 @@ class ShipmentController(
     @GetMapping
     fun getShipmentsByUserId(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String?
+        @RequestHeader(ApiConstants.PARAM_USER_ID, required = false) userId: String?
     ): ResponseEntity<List<ShipmentEntity>> {
         val shipments = this.getShipmentsUseCase.setLanguage(language).startCommand(userId)
         this.logger.info(GET_SHIPMENTS_BY_USER_ID_LOG, userId, shipments.joinToString())
@@ -95,7 +95,7 @@ class ShipmentController(
     @PostMapping
     fun saveNewShipment(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String,
+        @RequestHeader(ApiConstants.PARAM_USER_ID, required = false) userId: String,
         @RequestBody(required = false) @Valid request: ShipmentEntityDto?
     ): ResponseEntity<Any> {
         val shipment = this.saveShipmentUseCase.setLanguage(language).startCommand(request?.copy(userId = userId))
@@ -112,8 +112,8 @@ class ShipmentController(
     @PutMapping
     fun updateExistingShipment(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @RequestHeader(ApiConstants.HEADER_USER_ID, required = false) userId: String?,
-        @RequestBody(required = false) request: ShipmentEntity?
+        @RequestHeader(ApiConstants.PARAM_USER_ID, required = false) userId: String?,
+        @RequestBody(required = false) @Valid request: ShipmentEntityDto?
     ): ResponseEntity<ApiResult> {
         val result = this.updateShipmentUseCase.setLanguage(language).startCommand(request?.copy(userId = userId ?: ""))
         this.logger.info(UPDATE_SHIPMENT_LOG, userId, request)

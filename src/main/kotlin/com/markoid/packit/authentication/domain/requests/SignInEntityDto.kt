@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import javax.validation.constraints.Email
 import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.Size
 
 /**
  * Data Transfer Object for Signing In purposes. In-place validations will be performed.
@@ -17,7 +18,7 @@ data class SignInEntityDto(
 
     @JsonProperty("password", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    @get:Min(value = 6, message = "Parameter must be 6 length long.")
+    @get:Size(message = "Parameter must be 6 length long.", min = 6)
     var password: String,
 
     @JsonProperty("fcm_token")
