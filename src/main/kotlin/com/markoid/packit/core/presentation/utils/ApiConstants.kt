@@ -28,6 +28,7 @@ object ApiConstants {
     const val GET_LAST_LOCATION_URL = "/getLastLocation"
     const val UPDATE_SHIPMENT_STATUS_URL = "/updateShipmentStatus"
     const val UPDATE_TRIP_STATUS_URL = "/updateTripStatus"
+    const val SEND_EMAIL = "/sendEmail"
     const val SIGN_IN_URL = "/signIn"
     const val SIGN_UP_URL = "/signUp"
 

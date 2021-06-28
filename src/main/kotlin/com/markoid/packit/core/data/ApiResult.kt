@@ -31,7 +31,7 @@ data class ApiResult(
     /**
      * Timestamp in which the response was produced.
      */
-    val timestamp: Instant = Instant.now(),
+    val timestamp: String = Instant.now().toString(),
 
     /**
      * In case of error, the type of the exception thrown. Only visible if property is not empty.

@@ -6,7 +6,6 @@ import com.markoid.packit.core.presentation.handlers.LocaleResolver
 import com.markoid.packit.core.presentation.utils.ApiConstants.AUTH_PATH
 import com.markoid.packit.core.presentation.utils.ApiConstants.SIGN_IN_URL
 import com.markoid.packit.core.presentation.utils.ApiConstants.SIGN_UP_URL
-import org.springframework.context.MessageSource
 import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
