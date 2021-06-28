@@ -17,6 +17,9 @@ class HistoryController(
     fun getHistoryByUserId(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestParam("userId") userId: String?
-    ): ResponseEntity<List<HistoryEntity>> = this.getHistoryByUserIdUseCase.setLanguage(language).startCommand(userId)
+    ): ResponseEntity<List<HistoryEntity>> {
+        val result = this.getHistoryByUserIdUseCase.setLanguage(language).startCommand(userId)
+        return ResponseEntity.ok(result)
+    }
 
 }

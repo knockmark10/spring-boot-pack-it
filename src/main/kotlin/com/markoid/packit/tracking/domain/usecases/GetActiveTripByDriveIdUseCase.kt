@@ -1,7 +1,7 @@
 package com.markoid.packit.tracking.domain.usecases
 
 import com.markoid.packit.authentication.data.repository.AuthRepository
-import com.markoid.packit.core.domain.usecases.BaseUseCase
+import com.markoid.packit.core.domain.usecases.AbstractUseCase
 import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
 import com.markoid.packit.shipments.data.entities.ShipmentEntity
 import com.markoid.packit.shipments.data.repository.ShipmentRepository
@@ -15,21 +15,20 @@ class GetActiveTripByDriveIdUseCase(
     private val authRepository: AuthRepository,
     private val shipmentRepository: ShipmentRepository,
     private val trackingRepository: TrackingRepository
-) : BaseUseCase<TripResult, String>() {
+) : AbstractUseCase<TripResult, String>() {
 
-    override fun onValidateRequest(request: String): ValidationStatus = when {
-        request.isEmpty() -> ValidationStatus.Failure(ExceptionDictionary.MISSING_PARAMETERS)
+    override fun onHandleValidations(params: String): ValidationStatus = when {
+        params.isEmpty() -> ValidationStatus.Failure(ExceptionDictionary.MISSING_PARAMETERS)
         else -> ValidationStatus.Success
     }
 
-    override fun postValidatedExecution(driverId: String): TripResult {
+    override fun onExecuteTask(driverId: String): TripResult {
         // Get the trip with the driver associated. Return empty json instead
         val trip =
             trackingRepository.getTripByDriverId(driverId) ?: return TripResult()
 
         // The trip should be active or inactive
-        if (trip.status == null || trip.status == TripStatus.Archived)
-            throw raiseException(ExceptionDictionary.TRIP_NOT_FOUND)
+        if (trip.status == TripStatus.Archived) throw raiseException(ExceptionDictionary.TRIP_NOT_FOUND)
 
         // Build the shipment list from the trip attachments
         val shipments = buildShipmentList(trip.attachments)

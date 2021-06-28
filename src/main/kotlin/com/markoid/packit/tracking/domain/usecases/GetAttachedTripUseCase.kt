@@ -1,7 +1,7 @@
 package com.markoid.packit.tracking.domain.usecases
 
 import com.markoid.packit.authentication.data.repository.AuthRepository
-import com.markoid.packit.core.domain.usecases.BaseUseCase
+import com.markoid.packit.core.domain.usecases.AbstractUseCase
 import com.markoid.packit.core.presentation.handlers.ExceptionDictionary.*
 import com.markoid.packit.tracking.data.repository.TrackingRepository
 import com.markoid.packit.tracking.domain.usecases.results.GetAttachedTripResult
@@ -9,13 +9,13 @@ import com.markoid.packit.tracking.domain.usecases.results.GetAttachedTripResult
 class GetAttachedTripUseCase(
     private val authRepository: AuthRepository,
     private val trackingRepository: TrackingRepository
-) : BaseUseCase<GetAttachedTripResult, String>() {
+) : AbstractUseCase<GetAttachedTripResult, String>() {
 
-    override fun onValidateRequest(request: String): ValidationStatus =
-        if (request.isEmpty()) ValidationStatus.Failure(MISSING_PARAMETERS)
+    override fun onHandleValidations(params: String): ValidationStatus =
+        if (params.isEmpty()) ValidationStatus.Failure(MISSING_PARAMETERS)
         else ValidationStatus.Success
 
-    override fun postValidatedExecution(userId: String): GetAttachedTripResult {
+    override fun onExecuteTask(userId: String): GetAttachedTripResult {
         // Get the user
         val user = this.authRepository.getUserById(userId) ?: throw raiseException(USER_NOT_FOUND)
 

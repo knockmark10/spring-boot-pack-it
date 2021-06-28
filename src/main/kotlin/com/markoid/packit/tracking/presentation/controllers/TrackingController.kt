@@ -34,6 +34,9 @@ class TrackingController(
         const val ATTACH_TRACKER_LOG = "Tracker has been attached.\n{}"
         const val BROADCAST_LOCATION_LOG = "Location has been broadcasted with data: \n{}"
         const val CREATE_TRIP_LOG = "New trip was created with data: \n{}"
+        const val GET_ACTIVE_TRIP_LOG = "Active trip requested with data: \n{}"
+        const val GET_ATTACHED_SHIPMENT_LOG = "Attached shipment requested: \n{}"
+        const val GET_ATTACHED_TRIP_LOG = "Attached trip requested: \n{}"
         const val GET_LAST_LOCATION_LOG = "Requested last location with response: \n{}"
         const val UPDATE_SHIPMENT_STATUS = "Shipment status has been updated: {}"
         const val UPDATE_TRIP_STATUS_LOG = "Trip status updated to: {}"
@@ -73,24 +76,36 @@ class TrackingController(
     fun getActiveTripByDriverId(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestParam("driverId") driverId: String?
-    ): ResponseEntity<TripResult> = this.getActiveTripByDriverIdUseCase.setLanguage(language).startCommand(driverId)
+    ): ResponseEntity<TripResult> {
+        val result = this.getActiveTripByDriverIdUseCase.setLanguage(language).startCommand(driverId)
+        this.logger.info(GET_ACTIVE_TRIP_LOG, result)
+        return ResponseEntity.ok(result)
+    }
 
     @GetMapping(ApiConstants.GET_ATTACHED_SHIPMENT_URL)
     fun getAttachedShipment(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestParam(ApiConstants.PARAM_USER_ID) userId: String?
-    ): ResponseEntity<Map<String, String>> = this.getAttachedShipmentUseCase.setLanguage(language).startCommand(userId)
+    ): ResponseEntity<Map<String, String>> {
+        val result = this.getAttachedShipmentUseCase.setLanguage(language).startCommand(userId)
+        this.logger.info(GET_ATTACHED_SHIPMENT_LOG, result)
+        return ResponseEntity.ok(result)
+    }
 
     @GetMapping(ApiConstants.GET_ATTACHED_TRIP_URL)
     fun getAttachedTrip(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestParam("userId") userId: String?
-    ): ResponseEntity<GetAttachedTripResult> = this.getAttachedTripUseCase.setLanguage(language).startCommand(userId)
+    ): ResponseEntity<GetAttachedTripResult> {
+        val result = this.getAttachedTripUseCase.setLanguage(language).startCommand(userId)
+        this.logger.info(GET_ATTACHED_TRIP_LOG, result)
+        return ResponseEntity.ok(result)
+    }
 
     @PostMapping(ApiConstants.GET_LAST_LOCATION_URL)
     fun getLastLocation(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @RequestBody(required = false) body: GetLastLocationDto?
+        @RequestBody(required = false) @Valid body: GetLastLocationDto?
     ): ResponseEntity<HistoryEntity> {
         val result = this.getLastLocationUseCase.setLanguage(language).startCommand(body)
         this.logger.info(GET_LAST_LOCATION_LOG, result)
