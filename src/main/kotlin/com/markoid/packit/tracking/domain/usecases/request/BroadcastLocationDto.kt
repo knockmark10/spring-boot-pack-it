@@ -10,27 +10,22 @@ data class BroadcastLocationDto(
 
     @JsonProperty("address", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    @get:NotEmpty(message = "Parameter should not be empty.")
     val address: String = "",
 
     @JsonProperty("city", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    @get:NotEmpty(message = "Parameter should not be empty.")
     val city: String,
 
     @JsonProperty("date", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    @get:NotEmpty(message = "Parameter should not be empty.")
     val date: String,
 
     @JsonProperty("latitude", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    @get:NotEmpty(message = "Parameter should not be empty.")
     val latitude: Double,
 
     @JsonProperty("longitude", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    @get:NotEmpty(message = "Parameter should not be empty.")
     val longitude: Double,
 
     @JsonProperty("shipmentStatus", required = true)
@@ -39,22 +34,18 @@ data class BroadcastLocationDto(
 
     @JsonProperty("state", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    @get:NotEmpty(message = "Parameter should not be empty.")
     val state: String,
 
     @JsonProperty("shipId", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    @get:NotEmpty(message = "Parameter should not be empty.")
     val shipId: String,
 
     @JsonProperty("tripId", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    @get:NotEmpty(message = "Parameter should not be empty.")
     val tripId: String,
 
     @JsonProperty("userId", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    @get:NotEmpty(message = "Parameter should not be empty.")
     val userId: String
 
 )

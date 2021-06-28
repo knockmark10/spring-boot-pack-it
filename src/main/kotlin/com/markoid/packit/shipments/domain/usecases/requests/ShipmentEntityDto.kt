@@ -14,7 +14,6 @@ data class ShipmentEntityDto(
 
     @JsonProperty("createdAt", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    @get:NotEmpty(message = "Parameter should not be empty.")
     val createdAt: String,
 
     @JsonProperty("deliveryDirection", required = true)
@@ -23,12 +22,10 @@ data class ShipmentEntityDto(
 
     @JsonProperty("name", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    @get:NotEmpty(message = "Parameter should not be empty.")
     val name: String,
 
     @JsonProperty("owner", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    @get:NotEmpty(message = "Parameter should not be empty.")
     val owner: String,
 
     @JsonProperty("packageList")
@@ -43,7 +40,6 @@ data class ShipmentEntityDto(
 
     @JsonProperty("shipId", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    @get:NotEmpty(message = "Parameter should not be empty.")
     val shipId: String,
 
     @JsonProperty("status", required = true)
@@ -55,7 +51,6 @@ data class ShipmentEntityDto(
 
     @JsonProperty("userId")
     @get:NotBlank(message = "Parameter is required.")
-    @get:NotEmpty(message = "Parameter should not be empty.")
     val userId: String = ""
 
 )

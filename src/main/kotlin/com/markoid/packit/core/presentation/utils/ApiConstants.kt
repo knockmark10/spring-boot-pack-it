@@ -8,9 +8,7 @@ object ApiConstants {
 
     const val HEADER_TOKEN = "x-access-token"
     const val HEADER_LANGUAGE = "language"
-    const val HEADER_SHIPMENT_ID = "shipid"
     const val PARAM_USER_ID = "userid"
-    const val PARAM_TRIP_ID = "trip"
 
     // PATHS
     private const val BASE_PATH = "/api/v2"
@@ -32,5 +30,7 @@ object ApiConstants {
     const val UPDATE_TRIP_STATUS_URL = "/updateTripStatus"
     const val SIGN_IN_URL = "/signIn"
     const val SIGN_UP_URL = "/signUp"
+
+    // VALIDATION
 
 }

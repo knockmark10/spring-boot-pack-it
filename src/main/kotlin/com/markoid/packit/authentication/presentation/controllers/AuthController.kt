@@ -48,8 +48,8 @@ class AuthController(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody @Valid body: SignUpEntityDto?
     ): ResponseEntity<ApiResult> {
-        /*val result = this.signUpUseCase.setLanguage(language).startCommand(body)
-        this.logger.info(SIGN_UP_LOG, body)*/
+        val result = this.signUpUseCase.setLanguage(language).startCommand(body)
+        this.logger.info(SIGN_UP_LOG, body)
         return ResponseEntity.ok(ApiResult("", ApiState.Success))
     }
 

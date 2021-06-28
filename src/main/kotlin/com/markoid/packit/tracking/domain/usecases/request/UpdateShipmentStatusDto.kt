@@ -8,13 +8,11 @@ import javax.validation.constraints.NotEmpty
 data class UpdateShipmentStatusDto(
 
     @JsonProperty("tripId", required = true)
-    @NotBlank(message = "Parameter is required")
-    @NotEmpty(message = "Parameter should not be empty")
+    @get:NotBlank(message = "Parameter is required")
     val tripId: String,
 
     @JsonProperty("shipId", required = true)
-    @NotBlank(message = "Parameter is required")
-    @NotEmpty(message = "Parameter should not be empty")
+    @get:NotBlank(message = "Parameter is required")
     val shipId: String,
 
     @JsonProperty("status", required = true)
