@@ -7,7 +7,6 @@ import com.markoid.packit.shipments.data.entities.ShipmentEntity
 import com.markoid.packit.shipments.data.entities.ShipmentStatus
 import com.markoid.packit.shipments.presentation.annotations.ValidDirection
 import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.PositiveOrZero
 
 data class ShipmentEntityDto(

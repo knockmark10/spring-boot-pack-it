@@ -2,9 +2,9 @@ package com.markoid.packit.tracking.domain.usecases.request
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.markoid.packit.shipments.data.entities.ShipmentStatus
-import com.markoid.packit.shipments.presentation.annotations.ValidShipmentStatus
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.PositiveOrZero
 
 data class BroadcastLocationDto(
 
@@ -21,15 +21,12 @@ data class BroadcastLocationDto(
     val date: String,
 
     @JsonProperty("latitude", required = true)
-    @get:NotBlank(message = "Parameter is required.")
     val latitude: Double,
 
     @JsonProperty("longitude", required = true)
-    @get:NotBlank(message = "Parameter is required.")
     val longitude: Double,
 
     @JsonProperty("shipmentStatus", required = true)
-    @get:ValidShipmentStatus(message = "Parameter is not a valid entry from ShipmentStatus.")
     val shipmentStatus: ShipmentStatus,
 
     @JsonProperty("state", required = true)

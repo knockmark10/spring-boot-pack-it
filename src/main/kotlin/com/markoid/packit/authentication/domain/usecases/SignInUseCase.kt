@@ -1,5 +1,6 @@
 package com.markoid.packit.authentication.domain.usecases
 
+import com.markoid.packit.authentication.data.entities.DriverEntity
 import com.markoid.packit.authentication.data.entities.UserEntity
 import com.markoid.packit.authentication.data.repository.AuthRepository
 import com.markoid.packit.authentication.domain.requests.SignInEntityDto
@@ -23,8 +24,8 @@ class SignInUseCase(
 
     override fun onExecuteTask(params: SignInEntityDto): SignInResult {
         // Search for user or driver. If it's not found, throw an error
-        val user = this.authRepository.getUserByEmail(params.email)
-            ?: this.authRepository.getDriverByEmail(params.email)
+        val user = getUserAndUpdateFirebaseToken(params.email, params.firebaseToken)
+            ?: getDriverAndUpdateFirebaseToken(params.email, params.firebaseToken)
             ?: throw raiseException(ExceptionDictionary.USER_NOT_FOUND)
 
         // Check if password provided matches with the one stored in the database
@@ -40,6 +41,18 @@ class SignInUseCase(
             userType = if (user is UserEntity) UserType.User else UserType.Driver
         )
     }
+
+    private fun getUserAndUpdateFirebaseToken(email: String, firebaseToken: String): UserEntity? =
+        this.authRepository.getUserByEmail(email)?.let {
+            // If user is found, update firebase token
+            this.authRepository.saveUser(it.copy(firebaseToken = firebaseToken))
+        }
+
+    private fun getDriverAndUpdateFirebaseToken(email: String, firebaseToken: String): DriverEntity? =
+        this.authRepository.getDriverByEmail(email)?.let {
+            // If Driver is found, update firebase token
+            this.authRepository.saveDriver(it.copy(firebaseToken = firebaseToken))
+        }
 
     private fun passwordMatches(passwordProvided: String, storedPassword: String): Boolean =
         this.bCryptPasswordEncoder.matches(passwordProvided, storedPassword)

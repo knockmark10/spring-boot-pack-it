@@ -29,6 +29,9 @@ class SendShipmentMailUseCase(
         // Set email to send the email to
         helper.setTo(params.email!!)
 
+        // Set sender mail
+        helper.setFrom("noreply@packit.com")
+
         // Set subject to email
         helper.setSubject("Pack It - Shipments Summary")
 

@@ -1,11 +1,13 @@
 package com.markoid.packit.shipments.presentation.config
 
+import com.markoid.packit.authentication.data.repository.AuthRepository
 import com.markoid.packit.shipments.data.cache.ShipmentCacheImpl
 import com.markoid.packit.shipments.data.dao.ShipmentDao
 import com.markoid.packit.shipments.data.datasource.ShipmentDataSourceImpl
 import com.markoid.packit.shipments.data.repository.ShipmentRepository
 import com.markoid.packit.shipments.data.repository.ShipmentRepositoryImpl
 import com.markoid.packit.shipments.domain.usecases.*
+import com.markoid.packit.tracking.data.repository.TrackingRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.mail.javamail.JavaMailSender
@@ -45,7 +47,10 @@ class ShipmentConfiguration {
         UpdateShipmentUseCase(shipmentRepository)
 
     @Bean
-    fun providesDeleteShipmentUseCase(shipmentRepository: ShipmentRepository): DeleteShipmentUseCase =
-        DeleteShipmentUseCase(shipmentRepository)
+    fun providesDeleteShipmentUseCase(
+        authRepository: AuthRepository,
+        shipmentRepository: ShipmentRepository,
+        trackingRepository: TrackingRepository
+    ): DeleteShipmentUseCase = DeleteShipmentUseCase(authRepository, shipmentRepository, trackingRepository)
 
 }

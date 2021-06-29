@@ -2,7 +2,6 @@ package com.markoid.packit.authentication.domain.requests
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import javax.validation.constraints.Email
-import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Size
 
@@ -22,7 +21,6 @@ data class SignInEntityDto(
     var password: String,
 
     @JsonProperty("fcm_token")
-    @get:NotBlank(message = "Parameter is required.")
     var firebaseToken: String = ""
 
 )

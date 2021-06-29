@@ -8,10 +8,10 @@ data class DeleteShipmentDto(
 
     @JsonProperty("shipId", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    val shipId: String?,
+    val shipId: String,
 
     @JsonProperty("userId", required = true)
     @get:NotBlank(message = "Parameter is required.")
-    val userId: String?
+    val userId: String
 
 )

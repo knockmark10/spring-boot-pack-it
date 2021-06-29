@@ -3,7 +3,6 @@ package com.markoid.packit.tracking.domain.usecases
 import com.markoid.packit.core.data.ApiResult
 import com.markoid.packit.core.domain.usecases.AbstractUseCase
 import com.markoid.packit.core.presentation.handlers.ExceptionDictionary.*
-import com.markoid.packit.shipments.data.entities.ShipmentStatus
 import com.markoid.packit.tracking.data.entities.HistoryEntity
 import com.markoid.packit.tracking.data.repository.TrackingRepository
 import com.markoid.packit.tracking.domain.usecases.request.BroadcastLocationDto
@@ -20,14 +19,13 @@ class BroadcastLocationUseCase(
             date = params.date,
             latitude = params.latitude,
             longitude = params.longitude,
-            shipmentStatus = params.shipmentStatus ?: ShipmentStatus.Idle,
+            shipmentStatus = params.shipmentStatus,
             state = params.state,
             userId = params.userId
         )
         // Get the trip requested. Throw an error if not found
-        val trip =
-            this.trackingRepository.getTripById(params.tripId)
-                ?: throw raiseException(TRIP_NOT_FOUND)
+        val trip = this.trackingRepository.getTripById(params.tripId)
+            ?: throw raiseException(TRIP_NOT_FOUND)
 
         // Get the trip's attachments, EXCEPT ours.
         val attachments = trip.attachments

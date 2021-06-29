@@ -10,7 +10,7 @@ data class CreateNewTripDto(
     @get:NotBlank(message = "Parameter is required.")
     val driverId: String,
 
-    @JsonProperty("tripStatus", required = true)
+    @JsonProperty("status", required = true)
     val tripStatus: TripStatus
 
 )

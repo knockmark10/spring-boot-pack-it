@@ -85,7 +85,7 @@ class TrackingController(
     @GetMapping(ApiConstants.GET_ATTACHED_SHIPMENT_URL)
     fun getAttachedShipment(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @RequestParam(ApiConstants.PARAM_USER_ID) userId: String?
+        @RequestParam(ApiConstants.PARAM_USER_ID_UPPER_CASE) userId: String?
     ): ResponseEntity<Map<String, String>> {
         val result = this.getAttachedShipmentUseCase.setLanguage(language).startCommand(userId)
         this.logger.info(GET_ATTACHED_SHIPMENT_LOG, result)
@@ -95,7 +95,7 @@ class TrackingController(
     @GetMapping(ApiConstants.GET_ATTACHED_TRIP_URL)
     fun getAttachedTrip(
         @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @RequestParam("userId") userId: String?
+        @RequestParam(ApiConstants.PARAM_USER_ID_UPPER_CASE) userId: String?
     ): ResponseEntity<GetAttachedTripResult> {
         val result = this.getAttachedTripUseCase.setLanguage(language).startCommand(userId)
         this.logger.info(GET_ATTACHED_TRIP_LOG, result)
