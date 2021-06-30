@@ -58,6 +58,6 @@ tasks.withType<Test> {
 
 tasks.withType<Jar> {
     manifest {
-        attributes["Main-Class"] = "com.markoid.packit.PackItApplication"
+        attributes["Main-Class"] = "com.markoid.packit.PackitApplication"
     }
 }
