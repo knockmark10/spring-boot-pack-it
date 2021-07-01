@@ -56,8 +56,9 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+/*
 tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "com.markoid.packit.PackitApplication"
     }
-}
+}*/
