@@ -1,0 +1,1 @@
+web: java -jar build\libs\packit-1.0.0-SNAPSHOT.jar
