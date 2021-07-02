@@ -56,8 +56,6 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-tasks.withType<Jar> {
-    manifest {
-        attributes["Main-Class"] = "PackitApplicationKt"
-    }
+springBoot {
+    mainClass.set("com.markoid.packit.PackitApplicationKt")
 }
