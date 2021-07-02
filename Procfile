@@ -1,1 +1,1 @@
-web: java -jar packit-1.0.0-SNAPSHOT.jar
+web: java -jar build\libs\*.jar
