@@ -44,14 +44,16 @@ class SignInUseCase(
 
     private fun getUserAndUpdateFirebaseToken(email: String, firebaseToken: String): UserEntity? =
         this.authRepository.getUserByEmail(email)?.let {
-            // If user is found, update firebase token
-            this.authRepository.saveUser(it.copy(firebaseToken = firebaseToken))
+            // If user is found, update firebase token ONLY if it's not empty.
+            if (firebaseToken.isNotEmpty()) this.authRepository.saveUser(it.copy(firebaseToken = firebaseToken))
+            else it
         }
 
     private fun getDriverAndUpdateFirebaseToken(email: String, firebaseToken: String): DriverEntity? =
         this.authRepository.getDriverByEmail(email)?.let {
-            // If Driver is found, update firebase token
-            this.authRepository.saveDriver(it.copy(firebaseToken = firebaseToken))
+            // If Driver is found, update firebase token ONLY if it's not empty.
+            if (firebaseToken.isNotEmpty()) this.authRepository.saveDriver(it.copy(firebaseToken = firebaseToken))
+            else it
         }
 
     private fun passwordMatches(passwordProvided: String, storedPassword: String): Boolean =
