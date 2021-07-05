@@ -1,7 +1,7 @@
 package com.markoid.packit.authentication.presentation.filters
 
 import com.markoid.packit.core.presentation.filters.AbstractAuthenticationFilter
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
+import com.markoid.packit.core.presentation.handlers.MessageDictionary
 import com.markoid.packit.core.presentation.handlers.AppLanguageResolver
 import com.markoid.packit.core.presentation.utils.ApiConstants
 import com.markoid.packit.core.presentation.utils.ApiConstants.HEADER_TOKEN
@@ -35,7 +35,7 @@ class AuthorizationFilter(
                 chain.doFilter(request, response)
 
             // Token is null for endpoints with token required, then send custom error
-            token == null -> setErrorResponse(ExceptionDictionary.ACCESS_NOT_GRANTED, response)
+            token == null -> setErrorResponse(MessageDictionary.ACCESS_NOT_GRANTED, response)
 
             // Authenticate existing token. It will send error if token has expired or is invalid.
             else -> authenticate(response, token)?.let {
@@ -57,7 +57,7 @@ class AuthorizationFilter(
         UsernamePasswordAuthenticationToken(user, null, emptyList())
     } catch (exception: Throwable) {
         // If token is invalid, send error message
-        setErrorResponse(ExceptionDictionary.TOKEN_FAILED, response)
+        setErrorResponse(MessageDictionary.TOKEN_FAILED, response)
         null
     }
 

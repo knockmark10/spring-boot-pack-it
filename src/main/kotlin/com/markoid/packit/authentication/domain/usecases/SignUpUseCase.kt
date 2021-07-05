@@ -7,7 +7,7 @@ import com.markoid.packit.authentication.domain.requests.SignUpEntityDto
 import com.markoid.packit.authentication.domain.requests.UserType
 import com.markoid.packit.core.data.ApiResult
 import com.markoid.packit.core.domain.usecases.AbstractUseCase
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
+import com.markoid.packit.core.presentation.handlers.MessageDictionary
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 class SignUpUseCase(
@@ -22,8 +22,8 @@ class SignUpUseCase(
 
         // If it's not null it means the desired user is taken. Throw an error based on the user type found.
         when {
-            existingUser != null && existingUser is UserEntity -> throw raiseException(ExceptionDictionary.USER_ALREADY_EXISTS)
-            existingUser != null && existingUser is DriverEntity -> throw raiseException(ExceptionDictionary.DRIVER_ALREADY_EXISTS)
+            existingUser != null && existingUser is UserEntity -> throw raiseException(MessageDictionary.USER_ALREADY_EXISTS)
+            existingUser != null && existingUser is DriverEntity -> throw raiseException(MessageDictionary.DRIVER_ALREADY_EXISTS)
         }
 
         // Create desired user based on the user type provided.
@@ -37,7 +37,7 @@ class SignUpUseCase(
             // Save user on the system
             this.authRepository.saveUser(user)
             // Return ok message
-            buildSuccessfulMessage(ExceptionDictionary.USER_CREATED_SUCCESSFULLY)
+            buildSuccessfulMessage(MessageDictionary.USER_CREATED_SUCCESSFULLY)
         } else {
             val driver = DriverEntity(
                 email = params.email,
@@ -48,7 +48,7 @@ class SignUpUseCase(
             // Save user on the system
             this.authRepository.saveDriver(driver)
             // Return ok message
-            buildSuccessfulMessage(ExceptionDictionary.DRIVER_CREATED_SUCCESSFULLY)
+            buildSuccessfulMessage(MessageDictionary.DRIVER_CREATED_SUCCESSFULLY)
         }
     }
 

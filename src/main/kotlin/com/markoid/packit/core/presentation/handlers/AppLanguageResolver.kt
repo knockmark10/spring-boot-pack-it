@@ -7,9 +7,9 @@ import java.util.*
 class AppLanguageResolver(private val messageSource: MessageSource) {
 
     /**
-     * Gets a translated string based on the [ExceptionDictionary] provided.
+     * Gets a translated string based on the [MessageDictionary] provided.
      */
-    fun getString(dictionary: ExceptionDictionary): String =
+    fun getString(dictionary: MessageDictionary): String =
         this.messageSource.getMessage(dictionary.key, null, getCurrentLocale())
 
     /**

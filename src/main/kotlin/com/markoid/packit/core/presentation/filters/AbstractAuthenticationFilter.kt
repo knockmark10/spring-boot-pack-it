@@ -3,7 +3,7 @@ package com.markoid.packit.core.presentation.filters
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.markoid.packit.core.data.ApiResult
 import com.markoid.packit.core.data.ApiState
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
+import com.markoid.packit.core.presentation.handlers.MessageDictionary
 import com.markoid.packit.core.presentation.handlers.AppLanguageResolver
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
@@ -16,7 +16,7 @@ abstract class AbstractAuthenticationFilter(
 ) : BasicAuthenticationFilter(authManager) {
 
     protected fun setErrorResponse(
-        dictionary: ExceptionDictionary,
+        dictionary: MessageDictionary,
         response: HttpServletResponse
     ) {
         response.status = dictionary.statusCode.value()

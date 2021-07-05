@@ -4,8 +4,8 @@ import com.markoid.packit.core.data.ApiResult
 import com.markoid.packit.core.domain.usecases.AbstractUseCase
 import com.markoid.packit.core.domain.usecases.AbstractUseCase.ValidationStatus.Failure
 import com.markoid.packit.core.domain.usecases.AbstractUseCase.ValidationStatus.Success
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary.MISSING_PARAMETERS
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary.SHIPMENT_CREATION_SUCCESSFUL
+import com.markoid.packit.core.presentation.handlers.MessageDictionary.MISSING_PARAMETERS
+import com.markoid.packit.core.presentation.handlers.MessageDictionary.SHIPMENT_CREATION_SUCCESSFUL
 import com.markoid.packit.shipments.domain.usecases.requests.SendMailDto
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper

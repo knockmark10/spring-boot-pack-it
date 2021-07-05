@@ -1,8 +1,8 @@
 package com.markoid.packit.tracking.domain.usecases
 
 import com.markoid.packit.core.domain.usecases.AbstractUseCase
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary.TRIP_ATTACHMENTS_NOT_FOUND
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary.TRIP_NOT_FOUND
+import com.markoid.packit.core.presentation.handlers.MessageDictionary.TRIP_ATTACHMENTS_NOT_FOUND
+import com.markoid.packit.core.presentation.handlers.MessageDictionary.TRIP_NOT_FOUND
 import com.markoid.packit.tracking.data.entities.HistoryEntity
 import com.markoid.packit.tracking.data.repository.TrackingRepository
 import com.markoid.packit.tracking.domain.usecases.request.GetLastLocationDto

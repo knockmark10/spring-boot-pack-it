@@ -2,8 +2,8 @@ package com.markoid.packit.shipments.domain.usecases
 
 import com.markoid.packit.core.data.ApiResult
 import com.markoid.packit.core.domain.usecases.AbstractUseCase
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary.SHIPMENT_UPDATE_ERROR
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary.SHIPMENT_UPDATE_SUCCESSFUL
+import com.markoid.packit.core.presentation.handlers.MessageDictionary.SHIPMENT_UPDATE_ERROR
+import com.markoid.packit.core.presentation.handlers.MessageDictionary.SHIPMENT_UPDATE_SUCCESSFUL
 import com.markoid.packit.shipments.data.repository.ShipmentRepository
 import com.markoid.packit.shipments.domain.usecases.requests.ShipmentEntityDto
 import com.markoid.packit.shipments.domain.usecases.requests.mapToEntity

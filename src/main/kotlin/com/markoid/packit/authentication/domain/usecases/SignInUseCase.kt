@@ -7,14 +7,13 @@ import com.markoid.packit.authentication.domain.requests.SignInEntityDto
 import com.markoid.packit.authentication.domain.requests.UserType
 import com.markoid.packit.authentication.domain.results.SignInResult
 import com.markoid.packit.core.domain.usecases.AbstractUseCase
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
+import com.markoid.packit.core.presentation.handlers.MessageDictionary
 import com.markoid.packit.core.presentation.utils.ApiConstants
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver
 import java.security.Key
 import java.util.*
 
@@ -27,11 +26,11 @@ class SignInUseCase(
         // Search for user or driver. If it's not found, throw an error
         val user = getUserAndUpdateFirebaseToken(params.email, params.firebaseToken)
             ?: getDriverAndUpdateFirebaseToken(params.email, params.firebaseToken)
-            ?: throw raiseException(ExceptionDictionary.USER_NOT_FOUND)
+            ?: throw raiseException(MessageDictionary.USER_NOT_FOUND)
 
         // Check if password provided matches with the one stored in the database
         if (passwordMatches(params.password, user.password).not())
-            throw raiseException(ExceptionDictionary.INVALID_CREDENTIALS)
+            throw raiseException(MessageDictionary.INVALID_CREDENTIALS)
 
         // Create a result object
         return SignInResult(

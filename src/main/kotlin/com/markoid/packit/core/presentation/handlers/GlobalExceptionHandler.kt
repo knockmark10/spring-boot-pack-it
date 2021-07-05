@@ -125,10 +125,10 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
 
     private fun getMessageForStatus(status: HttpStatus): String = when (status) {
         HttpStatus.UNAUTHORIZED ->
-            this.appLanguageResolver.getString(ExceptionDictionary.INVALID_CREDENTIALS)
+            this.appLanguageResolver.getString(MessageDictionary.INVALID_CREDENTIALS)
         HttpStatus.BAD_REQUEST ->
-            this.appLanguageResolver.getString(ExceptionDictionary.MISSING_PARAMETERS)
-        else -> this.appLanguageResolver.getString(ExceptionDictionary.SERVICE_UNAVAILABLE)
+            this.appLanguageResolver.getString(MessageDictionary.MISSING_PARAMETERS)
+        else -> this.appLanguageResolver.getString(MessageDictionary.SERVICE_UNAVAILABLE)
     }
 
 }

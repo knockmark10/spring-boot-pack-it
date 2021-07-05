@@ -2,7 +2,7 @@ package com.markoid.packit.tracking.domain.usecases
 
 import com.markoid.packit.authentication.data.repository.AuthRepository
 import com.markoid.packit.core.domain.usecases.AbstractUseCase
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
+import com.markoid.packit.core.presentation.handlers.MessageDictionary
 import com.markoid.packit.shipments.data.entities.ShipmentEntity
 import com.markoid.packit.shipments.data.repository.ShipmentRepository
 import com.markoid.packit.tracking.data.entities.AttachmentsEntity
@@ -18,7 +18,7 @@ class GetActiveTripByDriveIdUseCase(
 ) : AbstractUseCase<TripResult, String>() {
 
     override fun onHandleValidations(params: String): ValidationStatus = when {
-        params.isEmpty() -> ValidationStatus.Failure(ExceptionDictionary.MISSING_PARAMETERS)
+        params.isEmpty() -> ValidationStatus.Failure(MessageDictionary.MISSING_PARAMETERS)
         else -> ValidationStatus.Success
     }
 
@@ -28,7 +28,7 @@ class GetActiveTripByDriveIdUseCase(
             trackingRepository.getTripByDriverId(driverId) ?: return TripResult()
 
         // The trip should be active or inactive
-        if (trip.status == TripStatus.Archived) throw raiseException(ExceptionDictionary.TRIP_NOT_FOUND)
+        if (trip.status == TripStatus.Archived) throw raiseException(MessageDictionary.TRIP_NOT_FOUND)
 
         // Build the shipment list from the trip attachments
         val shipments = buildShipmentList(trip.attachments)

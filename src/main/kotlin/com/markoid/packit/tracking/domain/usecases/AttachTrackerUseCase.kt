@@ -4,7 +4,7 @@ import com.markoid.packit.authentication.data.entities.UserEntity
 import com.markoid.packit.authentication.data.repository.AuthRepository
 import com.markoid.packit.core.data.ApiResult
 import com.markoid.packit.core.domain.usecases.AbstractUseCase
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
+import com.markoid.packit.core.presentation.handlers.MessageDictionary
 import com.markoid.packit.tracking.data.entities.AttachmentsEntity
 import com.markoid.packit.tracking.data.entities.TripEntity
 import com.markoid.packit.tracking.data.repository.TrackingRepository
@@ -19,20 +19,20 @@ class AttachTrackerUseCase(
         // Check if user exists. Throw error otherwise
         val user =
             this.authRepository.getUserById(params.userId)
-                ?: throw raiseException(ExceptionDictionary.USER_NOT_FOUND)
+                ?: throw raiseException(MessageDictionary.USER_NOT_FOUND)
         // Check if trip exists. Throw error otherwise
         val trip =
             this.trackingRepository.getTripById(params.tripId)
-                ?: throw raiseException(ExceptionDictionary.TRIP_NOT_FOUND)
+                ?: throw raiseException(MessageDictionary.TRIP_NOT_FOUND)
         // Make sure the trip belongs to the driver
         if (trip.driverId == params.driverId) {
             appendUserShipmentsToTheTrip(params, trip, user)
         } else {
             // Show error
-            throw raiseException(ExceptionDictionary.TRIP_UNATACHABLE)
+            throw raiseException(MessageDictionary.TRIP_UNATACHABLE)
         }
         // If everything went good, return successful message
-        return buildSuccessfulMessage(ExceptionDictionary.TRIP_ATTACHED_SUCCESSFULLY)
+        return buildSuccessfulMessage(MessageDictionary.TRIP_ATTACHED_SUCCESSFULLY)
     }
 
     /**
@@ -45,7 +45,7 @@ class AttachTrackerUseCase(
         val shipmentAlreadyAttached = trip.attachments.any { it.shipmentId == userAttachments.shipmentId }
         if (shipmentAlreadyAttached) {
             // Show error message
-            throw raiseException(ExceptionDictionary.TRIP_SHIPMENT_ATTACHED_PREVIOUSLY)
+            throw raiseException(MessageDictionary.TRIP_SHIPMENT_ATTACHED_PREVIOUSLY)
         } else {
             // Shipment is not attached to trip yet, so we can attach it
             trip.attachments.add(userAttachments)
