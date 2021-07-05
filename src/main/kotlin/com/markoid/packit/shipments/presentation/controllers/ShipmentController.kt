@@ -48,11 +48,8 @@ class ShipmentController(
         response = ApiResult::class
     )
     @DeleteMapping
-    fun deleteShipmentByUserId(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
-        @RequestBody @Valid body: DeleteShipmentDto?
-    ): ResponseEntity<ApiResult> {
-        val result = this.deleteShipmentUseCase.setLanguage(language).startCommand(body)
+    fun deleteShipmentByUserId(@RequestBody @Valid body: DeleteShipmentDto?): ResponseEntity<ApiResult> {
+        val result = this.deleteShipmentUseCase.startCommand(body)
         this.logger.info(DELETE_SHIPMENT_LOG, body?.shipId, body?.userId)
         return ResponseEntity.ok(result)
     }
@@ -64,10 +61,8 @@ class ShipmentController(
         response = GenerateIdResult::class
     )
     @GetMapping(ApiConstants.GENERATE_SHIPMENT_ID)
-    fun generateShipmentId(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en"
-    ): ResponseEntity<GenerateIdResult> {
-        val generatedId = this.generateShipmentIdUseCase.setLanguage(language).startCommand(Unit)
+    fun generateShipmentId(): ResponseEntity<GenerateIdResult> {
+        val generatedId = this.generateShipmentIdUseCase.startCommand(Unit)
         this.logger.info(GENERATE_SHIPMENT_ID_LOG, generatedId)
         return ResponseEntity.ok(generatedId)
     }
@@ -80,10 +75,9 @@ class ShipmentController(
     )
     @GetMapping
     fun getShipmentsByUserId(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestHeader(ApiConstants.PARAM_USER_ID, required = false) userId: String?
     ): ResponseEntity<List<ShipmentEntity>> {
-        val shipments = this.getShipmentsUseCase.setLanguage(language).startCommand(userId)
+        val shipments = this.getShipmentsUseCase.startCommand(userId)
         this.logger.info(GET_SHIPMENTS_BY_USER_ID_LOG, userId, shipments.joinToString())
         return ResponseEntity.ok(shipments)
     }
@@ -96,10 +90,9 @@ class ShipmentController(
     )
     @PostMapping
     fun saveNewShipment(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody(required = false) @Valid request: ShipmentEntityDto?
     ): ResponseEntity<Any> {
-        val shipment = this.saveShipmentUseCase.setLanguage(language).startCommand(request)
+        val shipment = this.saveShipmentUseCase.startCommand(request)
         this.logger.info(SAVE_NEW_SHIPMENT_LOG, request?.userId, request)
         return ResponseEntity.ok(shipment)
     }
@@ -112,13 +105,12 @@ class ShipmentController(
     )
     @PostMapping(ApiConstants.SEND_EMAIL)
     fun sendEmail(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String? = "en",
         @RequestParam("email", required = false) email: String?,
         @RequestParam("file") file: MultipartFile?
     ): ResponseEntity<Any> {
         // Create Dto
         val request = SendMailDto(email, file)
-        val result = this.sendShipmentMailUseCase.setLanguage(language).startCommand(request)
+        val result = this.sendShipmentMailUseCase.startCommand(request)
         this.logger.info(SEND_EMAIL_LOG, email)
         return ResponseEntity.ok(result)
     }
@@ -131,10 +123,9 @@ class ShipmentController(
     )
     @PutMapping
     fun updateExistingShipment(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody(required = false) @Valid request: ShipmentEntityDto?
     ): ResponseEntity<ApiResult> {
-        val result = this.updateShipmentUseCase.setLanguage(language).startCommand(request)
+        val result = this.updateShipmentUseCase.startCommand(request)
         this.logger.info(UPDATE_SHIPMENT_LOG, request?.userId, request)
         return ResponseEntity.ok(result)
     }

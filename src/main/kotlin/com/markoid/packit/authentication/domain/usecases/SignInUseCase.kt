@@ -14,6 +14,7 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver
 import java.security.Key
 import java.util.*
 

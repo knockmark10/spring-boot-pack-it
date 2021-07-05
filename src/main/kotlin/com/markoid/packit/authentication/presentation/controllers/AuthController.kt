@@ -1,43 +1,31 @@
 package com.markoid.packit.authentication.presentation.controllers
 
+import com.markoid.packit.authentication.data.service.implementation.AuthServiceImpl
 import com.markoid.packit.authentication.domain.requests.SignInEntityDto
 import com.markoid.packit.authentication.domain.requests.SignUpEntityDto
 import com.markoid.packit.authentication.domain.results.SignInResult
-import com.markoid.packit.authentication.domain.usecases.SignInUseCase
-import com.markoid.packit.authentication.domain.usecases.SignUpUseCase
 import com.markoid.packit.core.data.ApiResult
-import com.markoid.packit.core.data.ApiState
 import com.markoid.packit.core.presentation.utils.ApiConstants
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
-import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import javax.validation.Valid
 
 @RequestMapping(ApiConstants.AUTH_PATH)
 @RestController
-class AuthController(
-    private val signInUseCase: SignInUseCase,
-    private val signUpUseCase: SignUpUseCase
-) {
-
-    private val logger = LoggerFactory.getLogger(AuthController::class.java)
-
-    companion object {
-        const val SIGN_IN_LOG = "A successful login has been performed for user {} {}"
-        const val SIGN_UP_LOG = "New user has signed up into our system {}"
-    }
+class AuthController(private val authService: AuthServiceImpl) {
 
     @ApiOperation("Performs authentication with user-password credentials.")
     @ApiResponse(code = 200, message = "User's information returned.")
     @PostMapping(ApiConstants.SIGN_IN_URL)
     fun signIn(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody(required = false) @Valid body: SignInEntityDto?
     ): ResponseEntity<SignInResult> {
-        val result = this.signInUseCase.setLanguage(language).startCommand(body)
-        this.logger.info(SIGN_IN_LOG, result.name, result.lastName)
+        val result = this.authService.signIn(body)
         return ResponseEntity.ok(result)
     }
 
@@ -45,12 +33,10 @@ class AuthController(
     @ApiResponse(code = 200, message = "A message indicating the signing up process.")
     @PostMapping(ApiConstants.SIGN_UP_URL)
     fun signUp(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody @Valid body: SignUpEntityDto?
     ): ResponseEntity<ApiResult> {
-        val result = this.signUpUseCase.setLanguage(language).startCommand(body)
-        this.logger.info(SIGN_UP_LOG, body)
-        return ResponseEntity.ok(ApiResult("", ApiState.Success))
+        val result = this.authService.signUp(body)
+        return ResponseEntity.ok(result)
     }
 
 }

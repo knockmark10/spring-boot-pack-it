@@ -7,9 +7,9 @@ object ApiConstants {
     const val EXPIRATION_TIME = 1000 * 60 * 60 * 24
 
     const val HEADER_TOKEN = "x-access-token"
-    const val HEADER_LANGUAGE = "language"
     const val PARAM_USER_ID = "userid"
     const val PARAM_USER_ID_UPPER_CASE = "userId"
+    const val PARAM_LANGUAGE = "language"
 
     // PATHS
     private const val BASE_PATH = "/api/v2"
@@ -32,7 +32,5 @@ object ApiConstants {
     const val SEND_EMAIL = "/sendEmail"
     const val SIGN_IN_URL = "/signIn"
     const val SIGN_UP_URL = "/signUp"
-
-    // VALIDATION
 
 }
