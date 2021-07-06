@@ -1,6 +1,7 @@
 package com.markoid.packit.shipments.data.services.implementation
 
 import com.markoid.packit.core.data.ApiResult
+import com.markoid.packit.core.data.ApiState
 import com.markoid.packit.shipments.data.entities.ShipmentEntity
 import com.markoid.packit.shipments.data.services.ShipmentService
 import com.markoid.packit.shipments.domain.usecases.*
@@ -10,6 +11,7 @@ import com.markoid.packit.shipments.domain.usecases.requests.ShipmentEntityDto
 import com.markoid.packit.shipments.domain.usecases.results.GenerateIdResult
 import com.markoid.packit.shipments.presentation.controllers.ShipmentController
 import org.slf4j.LoggerFactory
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 
@@ -30,7 +32,7 @@ class ShipmentServiceImpl(
         const val GENERATE_SHIPMENT_ID_LOG = "New shipment id generated: {}"
         const val GET_SHIPMENTS_BY_USER_ID_LOG = "User with id {} have requested a list of shipments: {}"
         const val SAVE_NEW_SHIPMENT_LOG = "User with id {} has saved shipment {}"
-        const val SEND_EMAIL_LOG = "Shipment report has been sent to {}"
+        const val SEND_EMAIL_LOG = "Shipment report is being sent to {}. Wait a few seconds..."
         const val UPDATE_SHIPMENT_LOG = "User with id {} has updated his shipment {}"
     }
 
