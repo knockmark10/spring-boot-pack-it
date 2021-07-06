@@ -4,7 +4,7 @@ import com.markoid.packit.authentication.data.repository.AuthRepository
 import com.markoid.packit.core.domain.usecases.AbstractUseCase
 import com.markoid.packit.core.domain.usecases.AbstractUseCase.ValidationStatus.Failure
 import com.markoid.packit.core.domain.usecases.AbstractUseCase.ValidationStatus.Success
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary.DRIVER_NOT_FOUND
+import com.markoid.packit.core.presentation.handlers.MessageDictionary.DRIVER_NOT_FOUND
 import com.markoid.packit.tracking.data.entities.TripEntity
 import com.markoid.packit.tracking.data.repository.TrackingRepository
 import com.markoid.packit.tracking.domain.usecases.request.CreateNewTripDto

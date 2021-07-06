@@ -4,7 +4,7 @@ import com.markoid.packit.authentication.data.repository.AuthRepository
 import com.markoid.packit.core.domain.usecases.AbstractUseCase
 import com.markoid.packit.core.domain.usecases.AbstractUseCase.ValidationStatus.Failure
 import com.markoid.packit.core.domain.usecases.AbstractUseCase.ValidationStatus.Success
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary.*
+import com.markoid.packit.core.presentation.handlers.MessageDictionary.*
 import com.markoid.packit.tracking.data.entities.HistoryEntity
 import com.markoid.packit.tracking.data.repository.TrackingRepository
 

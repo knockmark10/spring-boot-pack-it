@@ -2,7 +2,7 @@ package com.markoid.packit.tracking.domain.usecases
 
 import com.markoid.packit.authentication.data.repository.AuthRepository
 import com.markoid.packit.core.domain.usecases.AbstractUseCase
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary.*
+import com.markoid.packit.core.presentation.handlers.MessageDictionary.*
 import com.markoid.packit.tracking.data.repository.TrackingRepository
 import com.markoid.packit.tracking.domain.usecases.results.GetAttachedTripResult
 

@@ -2,7 +2,6 @@ package com.markoid.packit.core.presentation.handlers
 
 import com.markoid.packit.core.data.ApiResult
 import com.markoid.packit.core.data.ApiState
-import com.markoid.packit.core.data.AppLanguage
 import com.markoid.packit.core.domain.exceptions.HttpStatusException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,7 +21,7 @@ import javax.validation.ConstraintViolationException
 class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
 
     @Autowired
-    private lateinit var localeResolver: LocaleResolver
+    private lateinit var appLanguageResolver: AppLanguageResolver
 
     private val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
 
@@ -126,10 +125,10 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
 
     private fun getMessageForStatus(status: HttpStatus): String = when (status) {
         HttpStatus.UNAUTHORIZED ->
-            this.localeResolver.getString(ExceptionDictionary.INVALID_CREDENTIALS, AppLanguage.ENGLISH)
+            this.appLanguageResolver.getString(MessageDictionary.INVALID_CREDENTIALS)
         HttpStatus.BAD_REQUEST ->
-            this.localeResolver.getString(ExceptionDictionary.MISSING_PARAMETERS, AppLanguage.ENGLISH)
-        else -> this.localeResolver.getString(ExceptionDictionary.SERVICE_UNAVAILABLE, AppLanguage.ENGLISH)
+            this.appLanguageResolver.getString(MessageDictionary.MISSING_PARAMETERS)
+        else -> this.appLanguageResolver.getString(MessageDictionary.SERVICE_UNAVAILABLE)
     }
 
 }

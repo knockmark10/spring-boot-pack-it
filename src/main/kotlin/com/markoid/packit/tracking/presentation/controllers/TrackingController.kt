@@ -44,90 +44,81 @@ class TrackingController(
 
     @PostMapping(ApiConstants.ATTACH_TRACKER_URL)
     fun attachTracker(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody(required = false) @Valid body: AttachTrackerDto?
     ): ResponseEntity<ApiResult> {
-        val result = this.attachTrackerUseCase.setLanguage(language).startCommand(body)
+        val result = this.attachTrackerUseCase.startCommand(body)
         this.logger.info(ATTACH_TRACKER_LOG, body)
         return ResponseEntity.ok(result)
     }
 
     @PostMapping(ApiConstants.BROADCAST_LOCATION_URL)
     fun broadcastLocation(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody(required = false) @Valid body: BroadcastLocationDto?
     ): ResponseEntity<ApiResult> {
-        val result = this.broadcastLocationUseCase.setLanguage(language).startCommand(body)
+        val result = this.broadcastLocationUseCase.startCommand(body)
         this.logger.info(BROADCAST_LOCATION_LOG, body)
         return ResponseEntity.ok(result)
     }
 
     @PostMapping(ApiConstants.CREATE_TRIP_URL)
     fun createNewTrip(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody body: CreateNewTripDto?
     ): ResponseEntity<TripEntity> {
-        val result = this.createNewTripUseCase.setLanguage(language).startCommand(body)
+        val result = this.createNewTripUseCase.startCommand(body)
         this.logger.info(CREATE_TRIP_LOG, result)
         return ResponseEntity.ok(result)
     }
 
     @GetMapping(ApiConstants.GET_ACTIVE_TRIP_BY_DRIVER_ID_URL)
     fun getActiveTripByDriverId(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestParam("driverId") driverId: String?
     ): ResponseEntity<TripResult> {
-        val result = this.getActiveTripByDriverIdUseCase.setLanguage(language).startCommand(driverId)
+        val result = this.getActiveTripByDriverIdUseCase.startCommand(driverId)
         this.logger.info(GET_ACTIVE_TRIP_LOG, result)
         return ResponseEntity.ok(result)
     }
 
     @GetMapping(ApiConstants.GET_ATTACHED_SHIPMENT_URL)
     fun getAttachedShipment(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestParam(ApiConstants.PARAM_USER_ID_UPPER_CASE) userId: String?
     ): ResponseEntity<Map<String, String>> {
-        val result = this.getAttachedShipmentUseCase.setLanguage(language).startCommand(userId)
+        val result = this.getAttachedShipmentUseCase.startCommand(userId)
         this.logger.info(GET_ATTACHED_SHIPMENT_LOG, result)
         return ResponseEntity.ok(result)
     }
 
     @GetMapping(ApiConstants.GET_ATTACHED_TRIP_URL)
     fun getAttachedTrip(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestParam(ApiConstants.PARAM_USER_ID_UPPER_CASE) userId: String?
     ): ResponseEntity<GetAttachedTripResult> {
-        val result = this.getAttachedTripUseCase.setLanguage(language).startCommand(userId)
+        val result = this.getAttachedTripUseCase.startCommand(userId)
         this.logger.info(GET_ATTACHED_TRIP_LOG, result)
         return ResponseEntity.ok(result)
     }
 
     @PostMapping(ApiConstants.GET_LAST_LOCATION_URL)
     fun getLastLocation(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody(required = false) @Valid body: GetLastLocationDto?
     ): ResponseEntity<HistoryEntity> {
-        val result = this.getLastLocationUseCase.setLanguage(language).startCommand(body)
+        val result = this.getLastLocationUseCase.startCommand(body)
         this.logger.info(GET_LAST_LOCATION_LOG, result)
         return ResponseEntity.ok(result)
     }
 
     @PutMapping(ApiConstants.UPDATE_SHIPMENT_STATUS_URL)
     fun updateShipmentStatus(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody(required = false) @Valid body: UpdateShipmentStatusDto?
     ): ResponseEntity<ApiResult> {
-        val result = this.updateShipmentStatusUseCase.setLanguage(language).startCommand(body)
+        val result = this.updateShipmentStatusUseCase.startCommand(body)
         this.logger.info(UPDATE_SHIPMENT_STATUS, body?.shipmentStatus)
         return ResponseEntity.ok(result)
     }
 
     @PutMapping(ApiConstants.UPDATE_TRIP_STATUS_URL)
     fun updateTripStatus(
-        @RequestHeader(ApiConstants.HEADER_LANGUAGE, required = false) language: String = "en",
         @RequestBody(required = false) @Valid body: UpdateTripDto?
     ): ResponseEntity<ApiResult> {
-        val result = this.updateTripStatusUseCase.setLanguage(language).startCommand(body)
+        val result = this.updateTripStatusUseCase.startCommand(body)
         this.logger.info(UPDATE_TRIP_STATUS_LOG, body?.status)
         return ResponseEntity.ok(result)
     }

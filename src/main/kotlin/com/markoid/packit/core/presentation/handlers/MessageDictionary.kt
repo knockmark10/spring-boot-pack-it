@@ -2,7 +2,7 @@ package com.markoid.packit.core.presentation.handlers
 
 import org.springframework.http.HttpStatus
 
-enum class ExceptionDictionary(val key: String, val statusCode: HttpStatus) {
+enum class MessageDictionary(val key: String, val statusCode: HttpStatus) {
     SERVICE_UNAVAILABLE("SERVICE_UNAVAILABLE", HttpStatus.INTERNAL_SERVER_ERROR),
     MISSING_PARAMETERS("MISSING_PARAMETERS", HttpStatus.BAD_REQUEST),
 

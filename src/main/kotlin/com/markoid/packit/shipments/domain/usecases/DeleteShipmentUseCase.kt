@@ -3,9 +3,9 @@ package com.markoid.packit.shipments.domain.usecases
 import com.markoid.packit.authentication.data.repository.AuthRepository
 import com.markoid.packit.core.data.ApiResult
 import com.markoid.packit.core.domain.usecases.AbstractUseCase
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary.SHIPMENT_DELETION_ERROR
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary.SHIPMENT_NOT_FOUND
+import com.markoid.packit.core.presentation.handlers.MessageDictionary
+import com.markoid.packit.core.presentation.handlers.MessageDictionary.SHIPMENT_DELETION_ERROR
+import com.markoid.packit.core.presentation.handlers.MessageDictionary.SHIPMENT_NOT_FOUND
 import com.markoid.packit.shipments.data.entities.ShipmentEntity
 import com.markoid.packit.shipments.data.entities.ShipmentStatus
 import com.markoid.packit.shipments.data.repository.ShipmentRepository
@@ -40,7 +40,7 @@ class DeleteShipmentUseCase(
         }
 
         // If everything went good, return successful message.
-        return buildSuccessfulMessage(ExceptionDictionary.SHIPMENT_DELETION_SUCCESSFUL)
+        return buildSuccessfulMessage(MessageDictionary.SHIPMENT_DELETION_SUCCESSFUL)
     }
 
     /**

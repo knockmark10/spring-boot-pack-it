@@ -7,6 +7,7 @@ import com.markoid.packit.shipments.data.datasource.ShipmentDataSourceImpl
 import com.markoid.packit.shipments.data.repository.ShipmentRepository
 import com.markoid.packit.shipments.data.repository.ShipmentRepositoryImpl
 import com.markoid.packit.shipments.domain.usecases.*
+import com.markoid.packit.shipments.presentation.utils.EmailManager
 import com.markoid.packit.tracking.data.repository.TrackingRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -39,8 +40,11 @@ class ShipmentConfiguration {
         SaveShipmentUseCase(shipmentRepository)
 
     @Bean
-    fun providesSendEmailUseCase(mailSender: JavaMailSender): SendShipmentMailUseCase =
-        SendShipmentMailUseCase(mailSender)
+    fun providesEmailManager(): EmailManager = EmailManager()
+
+    @Bean
+    fun providesSendEmailUseCase(emailSender: JavaMailSender, emailManager: EmailManager): SendShipmentMailUseCase =
+        SendShipmentMailUseCase(emailSender, emailManager)
 
     @Bean
     fun providesUpdateShipmentUseCase(shipmentRepository: ShipmentRepository): UpdateShipmentUseCase =

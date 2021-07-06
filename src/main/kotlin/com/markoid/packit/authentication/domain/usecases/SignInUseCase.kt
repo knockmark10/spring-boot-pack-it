@@ -7,7 +7,7 @@ import com.markoid.packit.authentication.domain.requests.SignInEntityDto
 import com.markoid.packit.authentication.domain.requests.UserType
 import com.markoid.packit.authentication.domain.results.SignInResult
 import com.markoid.packit.core.domain.usecases.AbstractUseCase
-import com.markoid.packit.core.presentation.handlers.ExceptionDictionary
+import com.markoid.packit.core.presentation.handlers.MessageDictionary
 import com.markoid.packit.core.presentation.utils.ApiConstants
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
@@ -26,11 +26,11 @@ class SignInUseCase(
         // Search for user or driver. If it's not found, throw an error
         val user = getUserAndUpdateFirebaseToken(params.email, params.firebaseToken)
             ?: getDriverAndUpdateFirebaseToken(params.email, params.firebaseToken)
-            ?: throw raiseException(ExceptionDictionary.USER_NOT_FOUND)
+            ?: throw raiseException(MessageDictionary.USER_NOT_FOUND)
 
         // Check if password provided matches with the one stored in the database
         if (passwordMatches(params.password, user.password).not())
-            throw raiseException(ExceptionDictionary.INVALID_CREDENTIALS)
+            throw raiseException(MessageDictionary.INVALID_CREDENTIALS)
 
         // Create a result object
         return SignInResult(
@@ -44,14 +44,16 @@ class SignInUseCase(
 
     private fun getUserAndUpdateFirebaseToken(email: String, firebaseToken: String): UserEntity? =
         this.authRepository.getUserByEmail(email)?.let {
-            // If user is found, update firebase token
-            this.authRepository.saveUser(it.copy(firebaseToken = firebaseToken))
+            // If user is found, update firebase token ONLY if it's not empty.
+            if (firebaseToken.isNotEmpty()) this.authRepository.saveUser(it.copy(firebaseToken = firebaseToken))
+            else it
         }
 
     private fun getDriverAndUpdateFirebaseToken(email: String, firebaseToken: String): DriverEntity? =
         this.authRepository.getDriverByEmail(email)?.let {
-            // If Driver is found, update firebase token
-            this.authRepository.saveDriver(it.copy(firebaseToken = firebaseToken))
+            // If Driver is found, update firebase token ONLY if it's not empty.
+            if (firebaseToken.isNotEmpty()) this.authRepository.saveDriver(it.copy(firebaseToken = firebaseToken))
+            else it
         }
 
     private fun passwordMatches(passwordProvided: String, storedPassword: String): Boolean =
