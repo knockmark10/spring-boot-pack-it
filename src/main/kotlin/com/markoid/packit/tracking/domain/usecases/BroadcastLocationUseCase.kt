@@ -47,7 +47,7 @@ class BroadcastLocationUseCase(
         this.trackingRepository.saveTrip(trip)
 
         // Return success
-        return buildSuccessfulMessage(TRIP_UPDATED_SUCCESSFULLY)
+        return okMessage(TRIP_UPDATED_SUCCESSFULLY)
     }
 
 }

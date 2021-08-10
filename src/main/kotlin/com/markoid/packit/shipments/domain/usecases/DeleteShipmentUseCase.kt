@@ -40,7 +40,7 @@ class DeleteShipmentUseCase(
         }
 
         // If everything went good, return successful message.
-        return buildSuccessfulMessage(MessageDictionary.SHIPMENT_DELETION_SUCCESSFUL)
+        return okMessage(MessageDictionary.SHIPMENT_DELETION_SUCCESSFUL)
     }
 
     /**

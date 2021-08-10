@@ -39,7 +39,7 @@ class UpdateTripStatusUseCase(
             }
         }
 
-        return buildSuccessfulMessage(MessageDictionary.TRIP_UPDATED_SUCCESSFULLY)
+        return okMessage(MessageDictionary.TRIP_UPDATED_SUCCESSFULLY)
     }
 
 }

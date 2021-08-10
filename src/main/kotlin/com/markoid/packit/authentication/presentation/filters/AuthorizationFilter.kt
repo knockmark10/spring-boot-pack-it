@@ -22,7 +22,8 @@ class AuthorizationFilter(
 
     private val endpointsWithNoRequiredToken = listOf(
         ApiConstants.SIGN_IN_URL,
-        ApiConstants.SIGN_UP_URL
+        ApiConstants.SIGN_UP_URL,
+        ApiConstants.DEBUG_PATH
     )
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
