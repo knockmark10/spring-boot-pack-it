@@ -20,7 +20,7 @@ class DebugServiceImpl(
         const val GET_LOG_PARAM = "Log request with user id: {}. Logs returned: {}"
     }
 
-    override fun saveLogMessage(log: LogDto) {
+    override fun saveLogMessage(log: LogDto?) {
         this.saveLogMessageUseCase.startCommand(log)
         this.logger.info(SAVE_LOG_PARAM, log)
     }

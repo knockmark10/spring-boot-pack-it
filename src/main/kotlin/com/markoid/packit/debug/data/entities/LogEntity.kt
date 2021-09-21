@@ -6,9 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Field
 @Document("logs")
 data class LogEntity(
 
-    @Field("userId")
-    val userId: String,
-
     @Field("type")
     val logType: LogType,
 

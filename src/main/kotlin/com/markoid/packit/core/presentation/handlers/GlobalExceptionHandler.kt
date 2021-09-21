@@ -93,7 +93,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         val status = responseStatus?.value ?: HttpStatus.INTERNAL_SERVER_ERROR
         val localizedMessage = exception.localizedMessage
         val path = request.getDescription(false)
-        val message = if (localizedMessage.isNotEmpty()) localizedMessage else status.reasonPhrase
+        val message = localizedMessage.ifEmpty { status.reasonPhrase }
         this.logger.error("Exception was thrown with message $message\nat uri $path")
         return getExceptionResponseEntity(
             exception = exception,

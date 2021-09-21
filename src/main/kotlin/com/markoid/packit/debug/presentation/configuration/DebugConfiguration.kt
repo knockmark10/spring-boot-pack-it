@@ -1,6 +1,5 @@
 package com.markoid.packit.debug.presentation.configuration
 
-import com.markoid.packit.authentication.data.repository.AuthRepository
 import com.markoid.packit.debug.data.dao.DebugDao
 import com.markoid.packit.debug.data.datasource.DebugDataSourceImpl
 import com.markoid.packit.debug.data.repository.DebugRepository
@@ -14,8 +13,7 @@ import org.springframework.context.annotation.Configuration
 class DebugConfiguration {
 
     @Bean
-    fun providesDebugDataSourceImpl(debugDao: DebugDao): DebugDataSourceImpl =
-        DebugDataSourceImpl(debugDao)
+    fun providesDebugDataSourceImpl(debugDao: DebugDao): DebugDataSourceImpl = DebugDataSourceImpl(debugDao)
 
     @Bean
     fun providesDebugRepository(debugDataSourceImpl: DebugDataSourceImpl): DebugRepositoryImpl =
@@ -26,9 +24,7 @@ class DebugConfiguration {
         GetLogMessageUseCase(debugRepository)
 
     @Bean
-    fun providesSaveLogMessageUseCase(
-        authRepository: AuthRepository,
-        debugRepository: DebugRepository
-    ): SaveLogMessageUseCase = SaveLogMessageUseCase(authRepository, debugRepository)
+    fun providesSaveLogMessageUseCase(debugRepository: DebugRepository): SaveLogMessageUseCase =
+        SaveLogMessageUseCase(debugRepository)
 
 }
