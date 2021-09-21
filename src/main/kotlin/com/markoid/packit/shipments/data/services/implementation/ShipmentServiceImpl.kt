@@ -1,7 +1,6 @@
 package com.markoid.packit.shipments.data.services.implementation
 
 import com.markoid.packit.core.data.ApiResult
-import com.markoid.packit.core.data.ApiState
 import com.markoid.packit.shipments.data.entities.ShipmentEntity
 import com.markoid.packit.shipments.data.services.ShipmentService
 import com.markoid.packit.shipments.domain.usecases.*
@@ -9,9 +8,7 @@ import com.markoid.packit.shipments.domain.usecases.requests.DeleteShipmentDto
 import com.markoid.packit.shipments.domain.usecases.requests.SendMailDto
 import com.markoid.packit.shipments.domain.usecases.requests.ShipmentEntityDto
 import com.markoid.packit.shipments.domain.usecases.results.GenerateIdResult
-import com.markoid.packit.shipments.presentation.controllers.ShipmentController
 import org.slf4j.LoggerFactory
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 
@@ -25,7 +22,7 @@ class ShipmentServiceImpl(
     private val updateShipmentUseCase: UpdateShipmentUseCase
 ) : ShipmentService {
 
-    private val logger = LoggerFactory.getLogger(ShipmentController::class.java)
+    private val logger = LoggerFactory.getLogger(ShipmentServiceImpl::class.java)
 
     companion object {
         const val DELETE_SHIPMENT_LOG = "Shipment with id: {} from user: {} was deleted."

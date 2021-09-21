@@ -32,7 +32,7 @@ class AttachTrackerUseCase(
             throw raiseException(MessageDictionary.TRIP_UNATACHABLE)
         }
         // If everything went good, return successful message
-        return buildSuccessfulMessage(MessageDictionary.TRIP_ATTACHED_SUCCESSFULLY)
+        return okMessage(MessageDictionary.TRIP_ATTACHED_SUCCESSFULLY)
     }
 
     /**

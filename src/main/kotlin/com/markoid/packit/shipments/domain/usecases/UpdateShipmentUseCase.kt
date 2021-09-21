@@ -16,7 +16,7 @@ class UpdateShipmentUseCase(
         val shipmentEntity = params.mapToEntity()
         // Check if shipment was updated
         if (this.repository.updateExistingShipment(params.userId, shipmentEntity)) {
-            return buildSuccessfulMessage(SHIPMENT_UPDATE_SUCCESSFUL)
+            return okMessage(SHIPMENT_UPDATE_SUCCESSFUL)
         } else {
             throw raiseException(SHIPMENT_UPDATE_ERROR)
         }
