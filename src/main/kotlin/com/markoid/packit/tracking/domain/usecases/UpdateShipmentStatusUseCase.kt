@@ -30,7 +30,7 @@ class UpdateShipmentStatusUseCase(
             .updateExistingShipment(attachment.userId, shipment.copy(status = params.shipmentStatus))
 
         // Return success message
-        return buildSuccessfulMessage(MessageDictionary.SHIPMENT_UPDATE_SUCCESSFUL)
+        return okMessage(MessageDictionary.SHIPMENT_UPDATE_SUCCESSFUL)
     }
 
 }

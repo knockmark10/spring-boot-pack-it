@@ -24,8 +24,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
-    // Joda Time library
-    implementation("joda-time:joda-time:2.10")
+    // PDF library
+    implementation("com.itextpdf:itextg:5.5.10")
 
     // Json Web Token
     implementation("io.jsonwebtoken:jjwt-impl:0.11.1")

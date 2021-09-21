@@ -37,7 +37,7 @@ class SignUpUseCase(
             // Save user on the system
             this.authRepository.saveUser(user)
             // Return ok message
-            buildSuccessfulMessage(MessageDictionary.USER_CREATED_SUCCESSFULLY)
+            okMessage(MessageDictionary.USER_CREATED_SUCCESSFULLY)
         } else {
             val driver = DriverEntity(
                 email = params.email,
@@ -48,7 +48,7 @@ class SignUpUseCase(
             // Save user on the system
             this.authRepository.saveDriver(driver)
             // Return ok message
-            buildSuccessfulMessage(MessageDictionary.DRIVER_CREATED_SUCCESSFULLY)
+            okMessage(MessageDictionary.DRIVER_CREATED_SUCCESSFULLY)
         }
     }
 

@@ -44,7 +44,7 @@ abstract class AbstractUseCase<Result, Params> {
     protected fun raiseException(dictionary: MessageDictionary): ResponseStatusException =
         HttpStatusException(dictionary.statusCode, appLanguageResolver.getString(dictionary))
 
-    protected fun buildSuccessfulMessage(dictionary: MessageDictionary): ApiResult =
+    protected fun okMessage(dictionary: MessageDictionary): ApiResult =
         ApiResult(message = appLanguageResolver.getString(dictionary), status = ApiState.Success)
 
 }
